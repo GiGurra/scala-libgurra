@@ -1,4 +1,4 @@
-package se.gigurra.lang
+package se.gigurra.compression
 
 /**
   * Created by johan on 2016-06-11.

@@ -1,4 +1,4 @@
-package se.gigurra.lang
+package se.gigurra.compression
 
 /**
   * From https://github.com/wasted/scala-util/blob/master/src/main/scala/io/wasted/util/Base64.scala
