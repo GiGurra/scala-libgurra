@@ -5,7 +5,7 @@ import scala.Specializable.Primitives
 /**
   * Created by kjolh on 3/19/2016.
   */
-case class Box[@specialized(Primitives) T : Numeric](width: T,
+case class Box[@specialized(Primitives) T : VecComp](width: T,
                                                      height: T,
                                                      center: Vec2[T]) {
 
