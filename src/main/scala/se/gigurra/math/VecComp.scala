@@ -9,7 +9,8 @@ import scala.math.Ordering
   */
 trait VecComp[@specialized(Primitives) T] extends Numeric[T]
   with Dividable[T]
-  with Zero[T] {
+  with Zero[T]
+  with One[T] {
 
 }
 
