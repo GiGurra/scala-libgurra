@@ -30,7 +30,8 @@ case class Vec3[@specialized(Primitives) T : VecComp](x: T, y: T, z: T) extends 
     )
   }
 
-  override def **(other: Vec3[T]): Vec3[T] = Vec3(x*other.x, y*other.y, z*other.z)
+  override def *|*(other: Vec3[T]): Vec3[T] = Vec3(x*other.x, y*other.y, z*other.z)
+  override def /|/(other: Vec3[T]): Vec3[T] = Vec3(x / other.x, y / other.y, z / other.z)
   def toVec4: Vec4[T] = Vec4(x, y, z, One[T])
 }
 

@@ -12,7 +12,8 @@ trait VecBase[@specialized(Primitives) T, Vec] {
   def +[_: FixErasure](vec: Vec): Vec
   def -[_: FixErasure](vec: Vec): Vec
   def dot(vec: Vec): T
-  def **(vec: Vec): Vec
+  def *|*(vec: Vec): Vec
+  def /|/(vec: Vec): Vec
   def *(value: T): Vec
   def /(value: T): Vec
   def +(value: T): Vec

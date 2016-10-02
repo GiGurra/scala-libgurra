@@ -19,7 +19,8 @@ case class Vec2[@specialized(Primitives) T : VecComp](x: T, y: T) extends VecBas
   override def +[_: FixErasure](other: Vec2[T]): Vec2[T] = Vec2(x + other.x, y + other.y)
   override def -[_: FixErasure](other: Vec2[T]): Vec2[T] = Vec2(x - other.x, y - other.y)
   override def dot(other: Vec2[T]): T = x * other.x + y * other.y
-  override def **(other: Vec2[T]): Vec2[T] = Vec2(x * other.x, y * other.y)
+  override def *|*(other: Vec2[T]): Vec2[T] = Vec2(x * other.x, y * other.y)
+  override def /|/(other: Vec2[T]): Vec2[T] = Vec2(x / other.x, y / other.y)
 }
 
 object Vec2 {

@@ -19,7 +19,8 @@ case class Vec4[@specialized(Primitives) T : VecComp](x: T, y: T, z: T, w: T) ex
   override def +[_: FixErasure](other: Vec4[T]): Vec4[T] = (toVec3 + other.toVec3).toVec4
   override def -[_: FixErasure](other: Vec4[T]): Vec4[T] = (toVec3 - other.toVec3).toVec4
   override def dot(other: Vec4[T]): T = toVec3 dot other.toVec3
-  override def **(other: Vec4[T]): Vec4[T] = (toVec3 ** other.toVec3).toVec4
+  override def *|*(other: Vec4[T]): Vec4[T] = (toVec3 *|* other.toVec3).toVec4
+  override def /|/(other: Vec4[T]): Vec4[T] = (toVec3 /|/ other.toVec3).toVec4
 
   def cross(other: Vec4[T]): Vec4[T] = (toVec3 cross other.toVec3).toVec4
 
