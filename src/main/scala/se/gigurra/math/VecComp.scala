@@ -10,9 +10,14 @@ import scala.math.Ordering
 trait VecComp[@specialized(Primitives) T] extends Numeric[T]
   with Dividable[T]
   with Zero[T]
-  with One[T] {
+  with One[T]
+  with Negative[T] {
 
 }
+
+trait VecCompImplicits extends Numeric.ExtraImplicits with DividableImplicits
+
+object VecCompImplicits extends VecCompImplicits
 
 object VecComp {
 
@@ -21,7 +26,6 @@ object VecComp {
   }
 
   implicit val vecCompFloat = new VecComp[Float] with FloatIsFractional with Ordering.FloatOrdering {}
-
 
   implicit val vecCompLong = new VecComp[Long] with LongIsIntegral with Ordering.LongOrdering {
     override def div(x: Long, y: Long): Long = x / y

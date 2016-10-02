@@ -15,6 +15,12 @@ trait Dividable[@specialized(Primitives) T] {
   implicit def mkDivisibleOps(lhs: T): Ops = new Ops(lhs)
 }
 
+trait DividableImplicits {
+  implicit def toOps[T](lhs: T)(implicit dividable: Dividable[T]) = dividable.mkDivisibleOps(lhs)
+}
+
+object DividableImplicits extends DividableImplicits
+
 object Dividable {
   implicit val intDivisible = new Dividable[Int] {
     override def div(x: Int, y: Int): Int = x / y
