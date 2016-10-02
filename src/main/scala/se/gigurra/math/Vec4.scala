@@ -22,6 +22,7 @@ case class Vec4[@specialized(Primitives) T : VecComp](x: T, y: T, z: T, w: T) ex
   override def *|*(other: Vec4[T]): Vec4[T] = (toVec3 *|* other.toVec3).toVec4
   override def /|/(other: Vec4[T]): Vec4[T] = (toVec3 /|/ other.toVec3).toVec4
 
+  def x(other: Vec4[T]): Vec4[T] = cross(other)
   def cross(other: Vec4[T]): Vec4[T] = (toVec3 cross other.toVec3).toVec4
 
   def normalizeByW: Vec4[T] = Vec4(x/w, y/w, z/w, One[T])

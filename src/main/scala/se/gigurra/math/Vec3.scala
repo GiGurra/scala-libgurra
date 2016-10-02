@@ -20,6 +20,7 @@ case class Vec3[@specialized(Primitives) T : VecComp](x: T, y: T, z: T) extends 
   override def -[_: FixErasure](other: Vec3[T]): Vec3[T] = Vec3(x - other.x, y - other.y, z - other.z)
   override def dot(other: Vec3[T]): T = x * other.x + y * other.y + z * other.z
 
+  def x(other: Vec3[T]): Vec3[T] = cross(other)
   def cross(other: Vec3[T]): Vec3[T] = {
     val u = this
     val v = other
