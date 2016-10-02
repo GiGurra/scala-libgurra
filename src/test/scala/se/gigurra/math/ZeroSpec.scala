@@ -24,10 +24,10 @@ class ZeroSpec
       Zero[Vec3[Long]]   shouldBe Vec3[Long]  (0L, 0L, 0L)
       Zero[Vec3[Double]] shouldBe Vec3[Double](0.0, 0.0, 0.0)
 
-      Zero[Vec4[Int]]    shouldBe Vec4[Int]   (0, 0, 0, 0)
-      Zero[Vec4[Float]]  shouldBe Vec4[Float] (0.0f, 0.0f, 0.0f, 0.0f)
-      Zero[Vec4[Long]]   shouldBe Vec4[Long]  (0L, 0L, 0L, 0L)
-      Zero[Vec4[Double]] shouldBe Vec4[Double](0.0, 0.0, 0.0, 0.0)
+      Zero[Vec4[Int]]    shouldBe Vec4[Int]   (0, 0, 0, 1)
+      Zero[Vec4[Float]]  shouldBe Vec4[Float] (0.0f, 0.0f, 0.0f, 1.0f)
+      Zero[Vec4[Long]]   shouldBe Vec4[Long]  (0L, 0L, 0L, 1L)
+      Zero[Vec4[Double]] shouldBe Vec4[Double](0.0, 0.0, 0.0, 1.0)
 
       Zero[Int]    shouldBe 0
       Zero[Float]  shouldBe 0.0f
