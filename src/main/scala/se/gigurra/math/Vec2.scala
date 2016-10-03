@@ -21,6 +21,11 @@ case class Vec2[@specialized(Primitives) T : VecComp](x: T, y: T) extends VecBas
   override def dot(other: Vec2[T]): T = x * other.x + y * other.y
   override def *|*(other: Vec2[T]): Vec2[T] = Vec2(x * other.x, y * other.y)
   override def /|/(other: Vec2[T]): Vec2[T] = Vec2(x / other.x, y / other.y)
+
+  def toInt(implicit caster: Caster[T, Int]): Vec2[Int] = Vec2(caster.cast(x), caster.cast(y))
+  def toFloat(implicit caster: Caster[T, Float]): Vec2[Float] = Vec2(caster.cast(x), caster.cast(y))
+  def toLong(implicit caster: Caster[T, Long]): Vec2[Long] = Vec2(caster.cast(x), caster.cast(y))
+  def toDouble(implicit caster: Caster[T, Double]): Vec2[Double] = Vec2(caster.cast(x), caster.cast(y))
 }
 
 object Vec2 {

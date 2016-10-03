@@ -31,6 +31,11 @@ case class Vec4[@specialized(Primitives) T : VecComp](x: T, y: T, z: T, w: T) ex
     val v = normalizeByW
     Vec3(v.x, v.y, v.z)
   }
+
+  def toInt(implicit caster: Caster[T, Int]): Vec4[Int] = Vec4(caster.cast(x), caster.cast(y), caster.cast(z), caster.cast(w))
+  def toFloat(implicit caster: Caster[T, Float]): Vec4[Float] = Vec4(caster.cast(x), caster.cast(y), caster.cast(z), caster.cast(w))
+  def toLong(implicit caster: Caster[T, Long]): Vec4[Long] = Vec4(caster.cast(x), caster.cast(y), caster.cast(z), caster.cast(w))
+  def toDouble(implicit caster: Caster[T, Double]): Vec4[Double] = Vec4(caster.cast(x), caster.cast(y), caster.cast(z), caster.cast(w))
 }
 
 object Vec4 {

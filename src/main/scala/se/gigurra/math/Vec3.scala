@@ -34,6 +34,11 @@ case class Vec3[@specialized(Primitives) T : VecComp](x: T, y: T, z: T) extends 
   override def *|*(other: Vec3[T]): Vec3[T] = Vec3(x*other.x, y*other.y, z*other.z)
   override def /|/(other: Vec3[T]): Vec3[T] = Vec3(x / other.x, y / other.y, z / other.z)
   def toVec4: Vec4[T] = Vec4(x, y, z, One[T])
+
+  def toInt(implicit caster: Caster[T, Int]): Vec3[Int] = Vec3(caster.cast(x), caster.cast(y), caster.cast(z))
+  def toFloat(implicit caster: Caster[T, Float]): Vec3[Float] = Vec3(caster.cast(x), caster.cast(y), caster.cast(z))
+  def toLong(implicit caster: Caster[T, Long]): Vec3[Long] = Vec3(caster.cast(x), caster.cast(y), caster.cast(z))
+  def toDouble(implicit caster: Caster[T, Double]): Vec3[Double] = Vec3(caster.cast(x), caster.cast(y), caster.cast(z))
 }
 
 object Vec3 {
