@@ -52,6 +52,8 @@ trait VecBaseInfixImplicits {
     def +[Vec <: VecBase[Double, Vec]](vec: Vec): Vec = vec + value
     def -[Vec <: VecBase[Double, Vec]](vec: Vec): Vec = vec |- value
   }
+
+
 }
 
 object VecBaseInfixImplicits extends VecBaseInfixImplicits
