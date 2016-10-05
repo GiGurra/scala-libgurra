@@ -32,10 +32,10 @@ case class Vec4[@specialized(Primitives) T : VecComp](x: T, y: T, z: T, w: T) ex
     Vec3(v.x, v.y, v.z)
   }
 
-  def toInt(implicit caster: Caster[T, Int]): Vec4[Int] = Vec4(caster.cast(x), caster.cast(y), caster.cast(z), caster.cast(w))
-  def toFloat(implicit caster: Caster[T, Float]): Vec4[Float] = Vec4(caster.cast(x), caster.cast(y), caster.cast(z), caster.cast(w))
-  def toLong(implicit caster: Caster[T, Long]): Vec4[Long] = Vec4(caster.cast(x), caster.cast(y), caster.cast(z), caster.cast(w))
-  def toDouble(implicit caster: Caster[T, Double]): Vec4[Double] = Vec4(caster.cast(x), caster.cast(y), caster.cast(z), caster.cast(w))
+  def toInt: Vec4[Int] = Vec4(x.toInt, y.toInt, z.toInt, w.toInt)
+  def toFloat: Vec4[Float] = Vec4(x.toFloat, y.toFloat, z.toFloat, w.toFloat)
+  def toLong: Vec4[Long] = Vec4(x.toLong, y.toLong, z.toLong, w.toLong)
+  def toDouble: Vec4[Double] = Vec4(x.toDouble, y.toDouble, z.toDouble, w.toDouble)
 }
 
 object Vec4 {
