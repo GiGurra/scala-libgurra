@@ -28,7 +28,7 @@ case class Box2[@specialized(Primitives) T : VecComp](ll: Vec2[T], size: Vec2[T]
 
   // Given by http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
   def overlaps(other: Box2[T]): Boolean = {
-    this.left < other.right && this.right > other.left && this.top < other.bottom && this.bottom > other.top
+    this.left < other.right && this.right > other.left && this.top > other.bottom && this.bottom < other.top
   }
 }
 
