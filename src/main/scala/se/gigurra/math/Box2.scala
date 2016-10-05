@@ -22,14 +22,11 @@ case class Box2[@specialized(Primitives) T : VecComp](ll: Vec2[T], size: Vec2[T]
   def ul: Vec2[T] = Vec2(left, top)
   def ur: Vec2[T] = Vec2(right, top)
 
-  def contains(pos: Vec2[T]): Boolean = {
-    left <= pos.x && pos.x <= right && bottom <= pos.y && pos.y <= top
-  }
-
   // Given by http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
-  def overlaps(other: Box2[T]): Boolean = {
-    this.left < other.right && this.right > other.left && this.top > other.bottom && this.bottom < other.top
-  }
+  def notContains(pos: Vec2[T]): Boolean = left > pos.x || pos.x > right || bottom > pos.y || pos.y > top
+  def contains(pos: Vec2[T]): Boolean = !notContains(pos)
+  def notOverlaps(other: Box2[T]): Boolean = left > other.right || right < other.left || top < other.bottom || bottom > other.top
+  def overlaps(other: Box2[T]): Boolean = !notOverlaps(other)
 }
 
 object Box2 {

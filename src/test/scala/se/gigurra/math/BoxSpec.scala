@@ -67,5 +67,14 @@ class BoxSpec
       }
 
     }
+
+    "Have working contains code" in {
+      val box1 = Box2(0.0f, 0.0f, 2.0f, 2.0f)
+      box1.contains(Vec2(-0.25f, 0.0f)) shouldBe false
+      box1.contains(Vec2(2.25f, 0.0f)) shouldBe false
+      box1.contains(Vec2(0.0f, -0.25f)) shouldBe false
+      box1.contains(Vec2(0.0f, 2.25f)) shouldBe false
+      box1.contains(Vec2(0.25f, 0.25f)) shouldBe true
+    }
   }
 }
