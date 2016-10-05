@@ -6,17 +6,23 @@ import VecCompImplicits._
 /**
   * Created by kjolh on 3/19/2016.
   */
-case class Box2[@specialized(Primitives) T : VecComp](width: T,
-                                                      height: T,
-                                                      center: Vec2[T]) {
+case class Box2[@specialized(Primitives) T : VecComp](ll: Vec2[T], size: Vec2[T]) {
 
-  lazy val left: T = center.x - width / Two[T]
-  lazy val right: T = center.x + width / Two[T]
-  lazy val top: T = center.y + height / Two[T]
-  lazy val bottom: T = center.y - height / Two[T]
+  def width = size.x
+  def height = size.y
 
-  lazy val ll: Vec2[T] = Vec2(left, bottom)
-  lazy val lr: Vec2[T] = Vec2(right, bottom)
-  lazy val ul: Vec2[T] = Vec2(left, top)
-  lazy val ur: Vec2[T] = Vec2(right, top)
+  def center = ll + size / Two[T]
+
+  def left: T = ll.x
+  def right: T = ll.x + width
+  def top: T = ll.y + height
+  def bottom: T = ll.y
+
+  def lr: Vec2[T] = Vec2(right, bottom)
+  def ul: Vec2[T] = Vec2(left, top)
+  def ur: Vec2[T] = Vec2(right, top)
+}
+
+object Box2 {
+  def apply[@specialized(Primitives) T : VecComp](x: T, y: T, width: T, height: T): Box2[T] = Box2(ll = Vec2(x,y), size = Vec2(width, height))
 }
