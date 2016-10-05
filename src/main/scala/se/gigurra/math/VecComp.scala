@@ -16,7 +16,7 @@ trait VecComp[@specialized(Primitives) T] extends Numeric[T]
 
 }
 
-trait VecCompImplicits extends Numeric.ExtraImplicits with DividableImplicits
+trait VecCompImplicits extends Numeric.ExtraImplicits with Ordering.ExtraImplicits with DividableImplicits
 
 object VecCompImplicits extends VecCompImplicits
 
