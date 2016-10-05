@@ -15,10 +15,10 @@ class BoxSpec
   "Box" should {
 
     "Have left/right/bottom/top implicitly imported functions" in {
-      val intBox = Box[Int](4,4,Vec2(2,2))
-      val longBox = Box[Long](4L,4L,Vec2(2L,2L))
-      val floatBox = Box[Float](4.0f,4.0f,Vec2(2.0f,2.0f))
-      val DoubleBox = Box[Double](4.0,4.0,Vec2(2.0,2.0))
+      val intBox = Box2[Int](4,4,Vec2(2,2))
+      val longBox = Box2[Long](4L,4L,Vec2(2L,2L))
+      val floatBox = Box2[Float](4.0f,4.0f,Vec2(2.0f,2.0f))
+      val DoubleBox = Box2[Double](4.0,4.0,Vec2(2.0,2.0))
 
       noException should be thrownBy intBox.left
       noException should be thrownBy intBox.right
