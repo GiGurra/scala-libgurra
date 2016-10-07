@@ -7,18 +7,18 @@ import se.gigurra.lang.FixErasure
 /**
   * Created by johan on 2016-09-19.
   */
-case class Vec3[@specialized(Primitives) T : VecComp](x: T, y: T, z: T) extends VecBase[T, Vec3[T]] {
-  override def *(value: T): Vec3[T] = Vec3(x * value, y * value, z * value)
-  override def /(value: T): Vec3[T] = Vec3(x / value, y / value, z / value)
-  override def +(value: T): Vec3[T] = Vec3(x + value, y + value, z + value)
-  override def -(value: T): Vec3[T] = Vec3(x - value, y - value, z - value)
-  override def unary_- : Vec3[T] = Vec3(-x, -y, -z)
-  protected[math] override def |/(value: T): Vec3[T] = Vec3(value / x, value / y, value / z)
-  protected[math] override def |-(value: T): Vec3[T] = Vec3(value - x, value - y, value - z)
+case class Vec3[@specialized(Primitives) T : VecComp](x: T, y: T, z: T) {
+  def *(value: T): Vec3[T] = Vec3(x * value, y * value, z * value)
+  def /(value: T): Vec3[T] = Vec3(x / value, y / value, z / value)
+  def +(value: T): Vec3[T] = Vec3(x + value, y + value, z + value)
+  def -(value: T): Vec3[T] = Vec3(x - value, y - value, z - value)
+  def unary_- : Vec3[T] = Vec3(-x, -y, -z)
+  def |/(value: T): Vec3[T] = Vec3(value / x, value / y, value / z)
+  def |-(value: T): Vec3[T] = Vec3(value - x, value - y, value - z)
 
-  override def +[_: FixErasure](other: Vec3[T]): Vec3[T] = Vec3(x + other.x, y + other.y, z + other.z)
-  override def -[_: FixErasure](other: Vec3[T]): Vec3[T] = Vec3(x - other.x, y - other.y, z - other.z)
-  override def dot(other: Vec3[T]): T = x * other.x + y * other.y + z * other.z
+  def +[_: FixErasure](other: Vec3[T]): Vec3[T] = Vec3(x + other.x, y + other.y, z + other.z)
+  def -[_: FixErasure](other: Vec3[T]): Vec3[T] = Vec3(x - other.x, y - other.y, z - other.z)
+  def dot(other: Vec3[T]): T = x * other.x + y * other.y + z * other.z
 
   def x(other: Vec3[T]): Vec3[T] = cross(other)
   def cross(other: Vec3[T]): Vec3[T] = {
@@ -31,8 +31,8 @@ case class Vec3[@specialized(Primitives) T : VecComp](x: T, y: T, z: T) extends 
     )
   }
 
-  override def *|*(other: Vec3[T]): Vec3[T] = Vec3(x*other.x, y*other.y, z*other.z)
-  override def /|/(other: Vec3[T]): Vec3[T] = Vec3(x / other.x, y / other.y, z / other.z)
+  def *|*(other: Vec3[T]): Vec3[T] = Vec3(x*other.x, y*other.y, z*other.z)
+  def /|/(other: Vec3[T]): Vec3[T] = Vec3(x / other.x, y / other.y, z / other.z)
   def toVec4: Vec4[T] = Vec4(x, y, z, One[T])
 
   def toInt: Vec3[Int] = Vec3(x.toInt, y.toInt, z.toInt)

@@ -7,20 +7,20 @@ import se.gigurra.lang.FixErasure
 /**
   * Created by johan on 2016-09-19.
   */
-case class Vec4[@specialized(Primitives) T : VecComp](x: T, y: T, z: T, w: T) extends VecBase[T, Vec4[T]] {
-  override def *(value: T): Vec4[T] = Vec4(x * value, y * value, z * value, w)
-  override def /(value: T): Vec4[T] = Vec4(x / value, y / value, z / value, w)
-  override def +(value: T): Vec4[T] = Vec4(x + value, y + value, z + value, w)
-  override def -(value: T): Vec4[T] = Vec4(x - value, y - value, z - value, w)
-  override def unary_- : Vec4[T] = Vec4(-x, -y, -z, w)
-  protected[math] override def |/(value: T): Vec4[T] = (toVec3 |/ value).toVec4
-  protected[math] override def |-(value: T): Vec4[T] = (toVec3 |- value).toVec4
+case class Vec4[@specialized(Primitives) T : VecComp](x: T, y: T, z: T, w: T) {
+  def *(value: T): Vec4[T] = Vec4(x * value, y * value, z * value, w)
+  def /(value: T): Vec4[T] = Vec4(x / value, y / value, z / value, w)
+  def +(value: T): Vec4[T] = Vec4(x + value, y + value, z + value, w)
+  def -(value: T): Vec4[T] = Vec4(x - value, y - value, z - value, w)
+  def unary_- : Vec4[T] = Vec4(-x, -y, -z, w)
+  def |/(value: T): Vec4[T] = (toVec3 |/ value).toVec4
+  def |-(value: T): Vec4[T] = (toVec3 |- value).toVec4
 
-  override def +[_: FixErasure](other: Vec4[T]): Vec4[T] = (toVec3 + other.toVec3).toVec4
-  override def -[_: FixErasure](other: Vec4[T]): Vec4[T] = (toVec3 - other.toVec3).toVec4
-  override def dot(other: Vec4[T]): T = toVec3 dot other.toVec3
-  override def *|*(other: Vec4[T]): Vec4[T] = (toVec3 *|* other.toVec3).toVec4
-  override def /|/(other: Vec4[T]): Vec4[T] = (toVec3 /|/ other.toVec3).toVec4
+  def +[_: FixErasure](other: Vec4[T]): Vec4[T] = (toVec3 + other.toVec3).toVec4
+  def -[_: FixErasure](other: Vec4[T]): Vec4[T] = (toVec3 - other.toVec3).toVec4
+  def dot(other: Vec4[T]): T = toVec3 dot other.toVec3
+  def *|*(other: Vec4[T]): Vec4[T] = (toVec3 *|* other.toVec3).toVec4
+  def /|/(other: Vec4[T]): Vec4[T] = (toVec3 /|/ other.toVec3).toVec4
 
   def x(other: Vec4[T]): Vec4[T] = cross(other)
   def cross(other: Vec4[T]): Vec4[T] = (toVec3 cross other.toVec3).toVec4
