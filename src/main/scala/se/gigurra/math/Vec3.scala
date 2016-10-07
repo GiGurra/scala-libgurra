@@ -39,9 +39,3 @@ case class Vec3[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](x: T
   def toLong: Vec3[Long] = Vec3(x.toLong, y.toLong, z.toLong)
   def toDouble: Vec3[Double] = Vec3(x.toDouble, y.toDouble, z.toDouble)
 }
-
-object Vec3 {
-  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric : Zero](): Vec3[T] = Vec3[T](Zero[T], Zero[T], Zero[T])
-  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric : Zero](x: T): Vec3[T] = Vec3[T](x, Zero[T], Zero[T])
-  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric : Zero](x: T, y: T): Vec3[T] = Vec3[T](x, y, Zero[T])
-}

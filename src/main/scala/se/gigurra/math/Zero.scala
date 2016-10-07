@@ -1,35 +1,31 @@
 package se.gigurra.math
 
 import scala.language.implicitConversions
-import scala.{specialized => spec}
 
 /**
   * Created by johan on 2016-09-27.
   */
-trait Zero[@spec(Int,Long,Float,Double) T] {
-  val zero: T
-}
 
 object Zero {
-  def apply[@specialized(Int,Long,Float,Double) T: Zero]: T = implicitly[Zero[T]].zero
 
-  implicit val intZero: Zero[Int] = new Zero[Int] { override val zero = 0 }
-  implicit val floatZero: Zero[Float] = new Zero[Float] { override val zero = 0.0f }
-  implicit val longZero: Zero[Long] = new Zero[Long] { override val zero = 0L }
-  implicit val doubleZero: Zero[Double] = new Zero[Double] { override val zero = 0.0 }
+  implicit val int: Int = 0
+  implicit val float: Float = 0.0f
+  implicit val long: Long = 0L
+  implicit val double: Double = 0.0
 
-  implicit val intVec2Zero: Zero[Vec2[Int]] = new Zero[Vec2[Int]] { override val zero = Vec2[Int]() }
-  implicit val floatVec2Zero: Zero[Vec2[Float]] = new Zero[Vec2[Float]] { override val zero = Vec2[Float]() }
-  implicit val longVec2Zero: Zero[Vec2[Long]] = new Zero[Vec2[Long]] { override val zero = Vec2[Long]() }
-  implicit val doubleVec2Zero: Zero[Vec2[Double]] = new Zero[Vec2[Double]] { override val zero = Vec2[Double]() }
+  implicit val vec2i: Vec2[Int] = Vec2[Int](0, 0)
+  implicit val vec2f: Vec2[Float] = Vec2[Float](0.0f, 0.0f)
+  implicit val vec2l: Vec2[Long] = Vec2[Long](0L, 0L)
+  implicit val vec2d: Vec2[Double] = Vec2[Double](0.0, 0.0)
 
-  implicit val intVec3Zero: Zero[Vec3[Int]] = new Zero[Vec3[Int]] { override val zero = Vec3[Int]() }
-  implicit val floatVec3Zero: Zero[Vec3[Float]] = new Zero[Vec3[Float]] { override val zero = Vec3[Float]() }
-  implicit val longVec3Zero: Zero[Vec3[Long]] = new Zero[Vec3[Long]] { override val zero = Vec3[Long]() }
-  implicit val doubleVec3Zero: Zero[Vec3[Double]] = new Zero[Vec3[Double]] { override val zero = Vec3[Double]() }
+  implicit val vec3i: Vec3[Int] = Vec3[Int](0, 0, 0)
+  implicit val vec3f: Vec3[Float] = Vec3[Float](0.0f, 0.0f, 0.0f)
+  implicit val vec3l: Vec3[Long] = Vec3[Long](0L, 0L, 0L)
+  implicit val vec3d: Vec3[Double] = Vec3[Double](0.0, 0.0, 0.0)
 
-  implicit val intVec4Zero: Zero[Vec4[Int]] = new Zero[Vec4[Int]] { override val zero = Vec4[Int]() }
-  implicit val floatVec4Zero: Zero[Vec4[Float]] = new Zero[Vec4[Float]] { override val zero = Vec4[Float]() }
-  implicit val longVec4Zero: Zero[Vec4[Long]] = new Zero[Vec4[Long]] { override val zero = Vec4[Long]() }
-  implicit val doubleVec4Zero: Zero[Vec4[Double]] = new Zero[Vec4[Double]] { override val zero = Vec4[Double]() }
+  implicit val vec4i: Vec4[Int] = Vec4[Int](0, 0, 0, 1)
+  implicit val vec4f: Vec4[Float] = Vec4[Float](0.0f, 0.0f, 0.0f, 1.0f)
+  implicit val vec4l: Vec4[Long] = Vec4[Long](0L, 0L, 0L, 1L)
+  implicit val vec4d: Vec4[Double] = Vec4[Double](0.0, 0.0, 0.0, 1.0)
+
 }

@@ -26,8 +26,3 @@ case class Vec2[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](x: T
   def toLong: Vec2[Long] = Vec2(x.toLong, y.toLong)
   def toDouble: Vec2[Double] = Vec2(x.toDouble, y.toDouble)
 }
-
-object Vec2 {
-  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric : Zero](): Vec2[T] = Vec2[T](Zero[T], Zero[T])
-  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric : Zero](x: T): Vec2[T] = Vec2[T](x, Zero[T])
-}
