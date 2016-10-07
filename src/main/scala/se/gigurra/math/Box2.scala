@@ -1,12 +1,11 @@
 package se.gigurra.math
 
-import scala.Specializable.Primitives
-import VecCompImplicits._
+import spire.implicits._
 
 /**
   * Created by kjolh on 3/19/2016.
   */
-case class Box2[@specialized(Primitives) T : VecComp](ll: Vec2[T], size: Vec2[T]) {
+case class Box2[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](ll: Vec2[T], size: Vec2[T]) {
 
   def width = size.x
   def height = size.y
@@ -30,5 +29,5 @@ case class Box2[@specialized(Primitives) T : VecComp](ll: Vec2[T], size: Vec2[T]
 }
 
 object Box2 {
-  def apply[@specialized(Primitives) T : VecComp](x: T, y: T, width: T, height: T): Box2[T] = Box2(ll = Vec2(x,y), size = Vec2(width, height))
+  def apply[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](x: T, y: T, width: T, height: T): Box2[T] = Box2(ll = Vec2(x,y), size = Vec2(width, height))
 }

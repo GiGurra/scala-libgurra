@@ -2,7 +2,6 @@ package se.gigurra.math
 
 import org.scalatest._
 import org.scalatest.mock._
-import se.gigurra.math.VecImplicits._
 
 import scala.language.postfixOps
 

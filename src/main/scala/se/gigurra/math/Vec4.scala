@@ -1,13 +1,13 @@
 package se.gigurra.math
 
-import scala.Specializable.Primitives
-import VecCompImplicits._
+
 import se.gigurra.lang.FixErasure
+import spire.implicits._
 
 /**
   * Created by johan on 2016-09-19.
   */
-case class Vec4[@specialized(Primitives) T : VecComp](x: T, y: T, z: T, w: T) {
+case class Vec4[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](x: T, y: T, z: T, w: T) {
   def *(value: T): Vec4[T] = Vec4(x * value, y * value, z * value, w)
   def /(value: T): Vec4[T] = Vec4(x / value, y / value, z / value, w)
   def +(value: T): Vec4[T] = Vec4(x + value, y + value, z + value, w)
@@ -39,8 +39,8 @@ case class Vec4[@specialized(Primitives) T : VecComp](x: T, y: T, z: T, w: T) {
 }
 
 object Vec4 {
-  def apply[@specialized(Primitives) T: VecComp](): Vec4[T] = Vec4[T](Zero[T], Zero[T], Zero[T], One[T])
-  def apply[@specialized(Primitives) T: VecComp](x: T): Vec4[T] = Vec4[T](x, Zero[T], Zero[T], One[T])
-  def apply[@specialized(Primitives) T: VecComp](x: T, y: T): Vec4[T] = Vec4[T](x, y, Zero[T], One[T])
-  def apply[@specialized(Primitives) T: VecComp](x: T, y: T, z: T): Vec4[T] = Vec4[T](x, y, z, One[T])
+  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric](): Vec4[T] = Vec4[T](Zero[T], Zero[T], Zero[T], One[T])
+  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric](x: T): Vec4[T] = Vec4[T](x, Zero[T], Zero[T], One[T])
+  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric](x: T, y: T): Vec4[T] = Vec4[T](x, y, Zero[T], One[T])
+  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric](x: T, y: T, z: T): Vec4[T] = Vec4[T](x, y, z, One[T])
 }

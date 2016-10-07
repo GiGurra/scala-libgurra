@@ -4,7 +4,6 @@ import org.scalatest._
 import org.scalatest.mock._
 
 import scala.language.postfixOps
-import VecImplicits._
 
 class Vec2ScalarOpsSpec
   extends WordSpec
