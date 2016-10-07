@@ -39,8 +39,8 @@ case class Vec4[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](x: T
 }
 
 object Vec4 {
-  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric](): Vec4[T] = Vec4[T](Zero[T], Zero[T], Zero[T], One[T])
-  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric](x: T): Vec4[T] = Vec4[T](x, Zero[T], Zero[T], One[T])
-  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric](x: T, y: T): Vec4[T] = Vec4[T](x, y, Zero[T], One[T])
-  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric](x: T, y: T, z: T): Vec4[T] = Vec4[T](x, y, z, One[T])
+  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric : Zero](): Vec4[T] = Vec4[T](Zero[T], Zero[T], Zero[T], One[T])
+  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric : Zero](x: T): Vec4[T] = Vec4[T](x, Zero[T], Zero[T], One[T])
+  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric : Zero](x: T, y: T): Vec4[T] = Vec4[T](x, y, Zero[T], One[T])
+  def apply[@specialized(Int,Long,Float,Double) T: spire.math.Numeric : Zero](x: T, y: T, z: T): Vec4[T] = Vec4[T](x, y, z, One[T])
 }
