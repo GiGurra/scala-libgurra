@@ -7,25 +7,30 @@ import spire.implicits._
   */
 case class Box2[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](ll: Vec2[T], size: Vec2[T]) {
 
-  def width = size.x
-  def height = size.y
+  final def width = size.x
+  final def height = size.y
 
-  def center = ll + size / Two[T]
+  final def center = ll + size / Two[T]
 
-  def left: T = ll.x
-  def right: T = ll.x + width
-  def top: T = ll.y + height
-  def bottom: T = ll.y
+  final def left: T = ll.x
+  final def right: T = ll.x + width
+  final def top: T = ll.y + height
+  final def bottom: T = ll.y
 
-  def lr: Vec2[T] = Vec2(right, bottom)
-  def ul: Vec2[T] = Vec2(left, top)
-  def ur: Vec2[T] = Vec2(right, top)
+  final def lr: Vec2[T] = Vec2(right, bottom)
+  final def ul: Vec2[T] = Vec2(left, top)
+  final def ur: Vec2[T] = Vec2(right, top)
 
   // Given by http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
-  def notContains(pos: Vec2[T]): Boolean = left > pos.x || pos.x > right || bottom > pos.y || pos.y > top
-  def contains(pos: Vec2[T]): Boolean = !notContains(pos)
-  def notOverlaps(other: Box2[T]): Boolean = left > other.right || right < other.left || top < other.bottom || bottom > other.top
-  def overlaps(other: Box2[T]): Boolean = !notOverlaps(other)
+  final def notContains(pos: Vec2[T]): Boolean = notContains(pos.x, pos.y)
+  final def contains(pos: Vec2[T]): Boolean = !notContains(pos)
+  final def notContains(x: T, y: T): Boolean = left > x || x > right || bottom > y || y > top
+  final def contains(x: T, y: T): Boolean = !notContains(x, y)
+
+  final def notOverlaps(other: Box2[T]): Boolean = notOverlaps(other.left, other.right, other.bottom, other.top)
+  final def overlaps(other: Box2[T]): Boolean = overlaps(other.left, other.right, other.bottom, other.top)
+  final def notOverlaps(otherLeft: T, otherRight: T, otherBottom: T, otherTop: T): Boolean = left > otherRight || right < otherLeft || top < otherBottom || bottom > otherTop
+  final def overlaps(otherLeft: T, otherRight: T, otherBottom: T, otherTop: T): Boolean = !notOverlaps(otherLeft, otherRight, otherBottom, otherTop)
 }
 
 object Box2 {
