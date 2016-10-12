@@ -1,2 +1,2 @@
 # scala-libgurra
-Lots of cool scala stuff - WITHOUT sub dependencies
+Some reusable stuff for my other projects
