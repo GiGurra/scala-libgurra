@@ -1,4 +1,4 @@
-organization := "se.gigurra"
+organization := "com.github.gigurra"
 name := "libgurra"
 version := "SNAPSHOT"
 
