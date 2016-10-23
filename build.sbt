@@ -1,9 +1,12 @@
 organization := "com.github.gigurra"
 name := "libgurra"
-version := "0.2.6-SNAPSHOT"
+version := "0.2.7-SNAPSHOT"
 
 scalaVersion := "2.11.8"
 scalacOptions ++= Seq("-feature", "-unchecked", "-deprecation")
+
+scalacOptions += "-target:jvm-1.6"
+javacOptions ++= Seq("-source", "1.6", "-target", "1.6")
 
 libraryDependencies ++= Seq(
   "org.spire-math"       %%   "spire"                 %   "0.12.0",
