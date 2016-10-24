@@ -6,6 +6,8 @@ package com.github.gigurra.math
 
 object Zero {
 
+  def apply[@specialized(Int,Long,Float,Double) T : spire.math.Numeric]: T = implicitly[spire.math.Numeric[T]].zero
+
   val int: Int = 0
   val float: Float = 0.0f
   val long: Long = 0L

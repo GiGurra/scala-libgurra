@@ -8,44 +8,112 @@ import scala.reflect.ClassTag
 /**
   * Created by johan on 2016-10-24.
   */
-case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](edge: Seq[Vec2[T]], clockwise: Boolean) {
+case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](edge: Seq[Vec2[T]],
+                                                                               clockwise: Boolean,
+                                                                               area: T) {
   require(edge.length >= 3, s"Polygon of less than 3 points")
 
-  lazy val asFloatArray: Array[T] = edge.toElementArray
+  final lazy val asElementArray: Array[T] = edge.toElementArray
+  final lazy val sides: Seq[(Vec2[T], Vec2[T])] = edge.sliding(2, 1).toSeq.map(p => (p.head, p(1))) ++ Seq((edge.last, edge.head))
+
+  def slice(i1: Int, i2: Int): (Polygon[T], Polygon[T]) = {
+    require(i1 >= 0, s"Start index of slice is negative")
+    require(i2 >= 0, s"End index of slice is negative")
+    require(i1 < edge.length, s"Start index is >= edge.length")
+    require(i2 < edge.length, s"End index is >= edge.length")
+    require(i1 != i2, s"Start index must be different than End index")
+    if (i1 > i2) {
+      doSlice(i2, i1).swap
+    } else {
+      doSlice(i1, i2)
+    }
+  }
+
+  /**
+    * Here we know i2 > i1, as this was verified in slice(..)
+    */
+  private def doSlice(i1: Int, i2: Int): (Polygon[T], Polygon[T]) = {
+    val n = edge.length
+    val fwdDelta = i2 - i1
+    val bwdDelta = fwdDelta - n
+    require(fwdDelta >= 2, s"Difference from Start index to End index must be >= 2")
+    require(bwdDelta <= -2, s"Difference from End index to from index must be <= -2")
+
+    val fwdPolygon = Polygon(((0 to i1) ++ (i2 until n)).map(edge.apply))
+    val bwdPolygon = Polygon((i1 to i2).map(edge.apply))
+
+    (fwdPolygon, bwdPolygon)
+  }
 
   final def counterClockWise: Boolean = !clockwise
   final def cw: Boolean = clockwise
   final def ccw: Boolean = counterClockWise
+  final def size: Int = edge.length
+  final def length: Int = size
 }
 
 object Polygon {
 
   def apply[@specialized(Int,Long,Float,Double) T : Numeric: ClassTag](edge: Seq[Vec2[T]]): Polygon[T] = {
-    new Polygon[T](edge, isClockWise(edge))
+    require(edge.length >= 3, s"Polygon is less than 3 points")
+    val w = clockwiseWeight(edge)
+    new Polygon[T](edge, w > Zero[T], w.abs() / Two[T])
   }
 
-  def isClockWise[@specialized(Int,Long,Float,Double) T : Numeric](edge: Seq[Vec2[T]]): Boolean = {
-    require(edge.length >= 3, s"Polygon of less than 3 points")
-    val zero = implicitly[Numeric[T]].zero
-    var area: T = zero
-    var p1x: T = zero
-    var p1y: T = zero
-    var p2x: T = zero
-    var p2y: T = zero
+  // See http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
+  def clockwiseWeight[@specialized(Int,Long,Float,Double) T : Numeric](edge: Seq[Vec2[T]]): T = {
+    require(edge.length >= 3, s"Polygon is less than 3 points")
+    var sum = Zero[T]
+    val n = edge.length
     var i = 0
-    val n = edge.length * 2 - 3
-    while (i < n) {
-      p1x = edge(i / 2 + 0).x
-      p1y = edge(i / 2 + 0).y
-      p2x = edge(i / 2 + 1).x
-      p2y = edge(i / 2 + 1).y
-      area += p1x * p2y - p2x * p1y
-      i += 2
+
+    def segment(i1: Int, i2: Int): T = {
+      val v1 = edge(i1)
+      val v2 = edge(i2)
+      (v2.x - v1.x) * (v2.y + v1.y)
     }
-    p1x = edge(edge.length - 2).x
-    p1y = edge(edge.length - 2).y
-    p2x = edge.head.x
-    p2y = edge.head.y
-    area + p1x * p2y - p2x * p1y < 0
+
+    while(i < n - 1) {
+      sum += segment(i, i+1)
+      i += 1
+    }
+
+    sum += segment(n-1, 0)
+
+    sum
+  }
+
+  /**
+    * Checks that a slice did not go through air
+    */
+  def isCompleteSlice[@specialized(Int,Long,Float,Double) T : Numeric](original: Polygon[T],
+                                                                       piece1: Polygon[T],
+                                                                       piece2: Polygon[T],
+                                                                       i1: Int,
+                                                                       i2: Int): Boolean = {
+    if (i1 > i2) {
+      doIsCompleteSlice(original, piece1, piece2, i2, i1)
+    } else {
+      doIsCompleteSlice(original, piece1, piece2, i1, i2)
+    }
+  }
+
+  /**
+    * Checks that a slice did not go through air, where i2 is guaranteed to be > i1
+    */
+  private def doIsCompleteSlice[@specialized(Int,Long,Float,Double) T : Numeric](original: Polygon[T],
+                                                                                 piece1: Polygon[T],
+                                                                                 piece2: Polygon[T],
+                                                                                 i1: Int,
+                                                                                 i2: Int): Boolean = {
+    val areaEpsilon = original.area / implicitly[Numeric[T]].pow(10, 5)
+    val cuttingEdge = (original.edge(i1), original.edge(i2))
+    def hasCuttingEdgeVertex(line: (Vec2[T], Vec2[T])): Boolean = {
+      // These can by definition never intersect
+      line._1 == cuttingEdge._1 || line._1 == cuttingEdge._2 || line._2 == cuttingEdge._1 || line._2 == cuttingEdge._2
+    }
+    def noLineCross(piece: Polygon[T]): Boolean = piece.sides.filterNot(hasCuttingEdgeVertex).forall(!LinesIntersect(_, cuttingEdge))
+    def areasAlmostSame: Boolean = (piece1.area + piece2.area - original.area).abs() <= areaEpsilon
+    areasAlmostSame && noLineCross(piece1) && noLineCross(piece2)
   }
 }
