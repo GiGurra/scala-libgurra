@@ -1,5 +1,9 @@
 package com.github.gigurra
 
+import com.github.gigurra.lang.{FixErasure2, FixErasure3, FixErasure4}
+
+import scala.reflect.ClassTag
+
 /**
   * Created by johan on 2016-10-07.
   */
@@ -87,5 +91,17 @@ package object math {
     def /(vec: Vec4[Double]): Vec4[Double] = vec |/ value
     def +(vec: Vec4[Double]): Vec4[Double] = vec + value
     def -(vec: Vec4[Double]): Vec4[Double] = vec |- value
+  }
+
+  implicit class Vec2ToArrayOps[@specialized(Int,Long,Float,Double) T : ClassTag : FixErasure2](vec2s: Seq[Vec2[T]]) {
+    def toElementArray: Array[T] = ToArray(vec2s)
+  }
+
+  implicit class Vec3ToArrayOps[@specialized(Int,Long,Float,Double) T : ClassTag : FixErasure3](vec3s: Seq[Vec3[T]]) {
+    def toElementArray: Array[T] = ToArray(vec3s)
+  }
+
+  implicit class Vec4ToArrayOps[@specialized(Int,Long,Float,Double) T : ClassTag : FixErasure4](vec4s: Seq[Vec4[T]]) {
+    def toElementArray: Array[T] = ToArray(vec4s)
   }
 }
