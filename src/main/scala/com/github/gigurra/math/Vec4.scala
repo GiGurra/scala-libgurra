@@ -43,4 +43,6 @@ object Vec4 {
   implicit def tuple2Vec4[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](tuple: (T, T, T, T)): Vec4[T] = {
     new Vec4[T](tuple._1, tuple._2, tuple._3, tuple._4)
   }
+
+  def zero[@specialized(Int,Long,Float,Double) T : spire.math.Numeric]: Vec4[T] = Vec4(Zero[T], Zero[T], Zero[T], One[T])
 }

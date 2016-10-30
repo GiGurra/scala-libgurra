@@ -32,4 +32,7 @@ object Vec2 {
   implicit def tuple2Vec2[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](tuple: (T, T)): Vec2[T] = {
     new Vec2[T](tuple._1, tuple._2)
   }
+
+  def zero[@specialized(Int,Long,Float,Double) T : spire.math.Numeric]: Vec2[T] = Vec2(Zero[T], Zero[T])
+
 }
