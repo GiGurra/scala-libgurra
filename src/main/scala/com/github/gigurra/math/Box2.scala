@@ -21,6 +21,11 @@ case class Box2[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](ll: 
   final def ul: Vec2[T] = Vec2(left, top)
   final def ur: Vec2[T] = Vec2(right, top)
 
+  final def +(offset: Vec2[T]): Box2[T] = Box2[T](ll = ll + offset, size)
+  final def -(offset: Vec2[T]): Box2[T] = Box2[T](ll = ll - offset, size)
+  final def *(scale: T): Box2[T] = Box2[T](ll, size * scale)
+  final def /(invScale: T): Box2[T] = Box2[T](ll, size / invScale)
+
   // Given by http://stackoverflow.com/questions/306316/determine-if-two-rectangles-overlap-each-other
   final def notContains(pos: Vec2[T]): Boolean = notContains(pos.x, pos.y)
   final def contains(pos: Vec2[T]): Boolean = !notContains(pos)
