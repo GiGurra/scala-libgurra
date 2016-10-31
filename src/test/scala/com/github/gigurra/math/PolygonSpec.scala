@@ -91,6 +91,29 @@ class PolygonSpec
       polygon.contains(Vec2(-0.00001, -0.00001)) shouldBe false
     }
 
+    "Check if point is contained (Square)" in {
+      val polygon = Polygon(Seq(
+        Vec2(0.0,0.0),
+        Vec2(1.0,0.0),
+        Vec2(1.0,1.0),
+        Vec2(0.0,1.0)
+      ))
+      polygon.contains(Vec2(0.5, 0.5)) shouldBe true
+      polygon.contains(Vec2(0.5, -0.5)) shouldBe false
+    }
+
+    "Check if point is contained (Pentagon)" in {
+      val polygon = Polygon(Seq(
+        Vec2(0.0,0.0),
+        Vec2(1.0,0.0),
+        Vec2(1.0,1.0),
+        Vec2(0.5,1.2),
+        Vec2(0.0,1.0)
+      ))
+      polygon.contains(Vec2(0.5, 0.5)) shouldBe true
+      polygon.contains(Vec2(0.5, -0.5)) shouldBe false
+    }
+
     "Calculate cg" in {
       Polygon(Seq(
         Vec2(0, 0),
