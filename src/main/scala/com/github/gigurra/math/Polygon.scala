@@ -52,6 +52,55 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
   }
 
   /**
+    * Checks if it is possible slice this polygon from i1 to i2 without cutting through air
+    */
+  def isCleanSlice(i1: Int, i2: Int): Boolean = {
+    val validPoints = i1 >= 0 && i2 >= 0 && i1 < edge.length && i2 < edge.length && i1 != i2
+    validPoints && (if (i1 > i2) {
+      doIsCleanSlice(i2, i1)
+    } else {
+      doIsCleanSlice(i1, i2)
+    })
+  }
+
+  def contains(point: Vec2[T]): Boolean = {
+    doContains(point.toDouble)
+  }
+
+  private def doIsCleanSlice(i1: Int, i2: Int): Boolean = {
+    val n = edge.length
+    val fwdDelta = i2 - i1
+    val bwdDelta = fwdDelta - n
+
+    if (fwdDelta >= 2 && bwdDelta <= -2) {
+      val unscaledOrigin = edge(i1).toDouble
+      val unscaledEnd = edge(i2).toDouble
+      val unscaledVector = unscaledEnd - unscaledOrigin
+      val origin = unscaledOrigin + unscaledVector * 1e-7
+      val end = unscaledEnd - unscaledVector * 1e-7
+      def toDouble(side: (Vec2[T], Vec2[T])): (Vec2[Double], Vec2[Double]) = (side._1.toDouble, side._2.toDouble)
+      doContains(origin) && doContains(end) && sides.map(toDouble).forall(!LinesIntersect(_, (origin, end)))
+    } else {
+      false
+    }
+  }
+
+  private def doContains(point: Vec2[Double]): Boolean =  {
+    var i = 0
+    var j = length - 1
+    var result = false
+    while (i < edge.length) {
+      if ((edge(i).y.toDouble > point.y) != (edge(j).y.toDouble > point.y) &&
+        (point.x < (edge(j).x.toDouble - edge(i).x.toDouble) * (point.y - edge(i).y.toDouble) / (edge(j).y.toDouble - edge(i).y.toDouble) + edge(i).x.toDouble)) {
+        result = !result
+      }
+      j = i
+      i += 1
+    }
+    result
+  }
+
+  /**
     * Here we know i2 > i1, as this was verified in slice(..)
     */
   private def doSlice(i1: Int, i2: Int): (Polygon[T], Polygon[T]) = {
