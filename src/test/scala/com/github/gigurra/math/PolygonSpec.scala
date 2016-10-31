@@ -85,6 +85,12 @@ class PolygonSpec
       Polygon(concaveCCWVertices).asElementArray shouldBe Array(0,0,2,1,4,0,4,4,2,3,0,4)
     }
 
+    "Check if point is contained" in {
+      val polygon = Polygon(concaveCCWVertices)
+      polygon.contains(Vec2(0.00001, 0.00001)) shouldBe true
+      polygon.contains(Vec2(-0.00001, -0.00001)) shouldBe false
+    }
+
     "Calculate cg" in {
       Polygon(Seq(
         Vec2(0, 0),

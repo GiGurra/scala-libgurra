@@ -63,6 +63,9 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
     })
   }
 
+  /**
+    * Not guaranteed to work for vertex coordinates
+    */
   def contains(point: Vec2[T]): Boolean = {
     doContains(point.toDouble)
   }
