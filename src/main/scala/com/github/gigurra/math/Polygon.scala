@@ -15,6 +15,28 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
 
   final lazy val asElementArray: Array[T] = edge.toElementArray
   final lazy val sides: Seq[(Vec2[T], Vec2[T])] = edge.sliding(2, 1).toSeq.map(p => (p.head, p(1))) ++ Seq((edge.last, edge.head))
+  final lazy val cg: Vec2[T] = doCalcCg()
+
+  def rotate(degrees: Double, origin: Vec2[T] = cg)(implicit double2T: Double2[T]): Polygon[T] = {
+
+    val cos = double2T.cvt(math.cos(degrees.toRadians))
+    val sin = double2T.cvt(math.sin(degrees.toRadians))
+
+    def rotateVertex(vertex: Vec2[T]): Vec2[T] = {
+      val localX = vertex.x - origin.x
+      val localY = vertex.y - origin.y
+      new Vec2[T](
+        x = cos * localX - sin * localY + origin.x,
+        y = sin * localX + cos * localY + origin.y
+      )
+    }
+
+    new Polygon[T](
+      edge = edge.map(rotateVertex),
+      clockwise = clockwise,
+      area = area
+    )
+  }
 
   def slice(i1: Int, i2: Int): (Polygon[T], Polygon[T]) = {
     require(i1 >= 0, s"Start index of slice is negative")
@@ -43,6 +65,26 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
     val bwdPolygon = Polygon((i1 to i2).map(edge.apply))
 
     (fwdPolygon, bwdPolygon)
+  }
+
+  /**
+    * Taken from http://stackoverflow.com/questions/5271583/center-of-gravity-of-a-polygon
+    */
+  private def doCalcCg(): Vec2[T] = {
+    var sum = Zero[T]
+    var vsum: Vec2[T] = Vec2.zero
+
+    var i = 0
+    while (i < edge.length) {
+      val v1 = edge(i)
+      val v2 = edge((i + 1) % length)
+      val cross = 2 * v1.x * v2.y - 2 * v1.y * v2.x // The 2 * is required for it to work with integral types
+      sum += cross
+      vsum += Vec2(v1.x + v2.x, v1.y + v2.y) * cross
+      i += 1
+    }
+
+    Vec2(vsum.x, vsum.y) / (3 * sum)
   }
 
   final def counterClockWise: Boolean = !clockwise

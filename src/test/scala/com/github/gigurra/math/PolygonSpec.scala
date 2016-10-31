@@ -11,7 +11,6 @@ class PolygonSpec
   with Matchers
   with OneInstancePerTest {
 
-
   val concaveCCWVertices = Seq(
     Vec2(0,0), // 0
     Vec2(2,1), // 1
@@ -76,6 +75,57 @@ class PolygonSpec
 
     "Be transformed into a raw data array" in {
       Polygon(concaveCCWVertices).asElementArray shouldBe Array(0,0,2,1,4,0,4,4,2,3,0,4)
+    }
+
+    "Calculate cg" in {
+      Polygon(Seq(
+        Vec2(0, 0),
+        Vec2(2, 0),
+        Vec2(2, 2),
+        Vec2(0, 2)
+      )).cg shouldBe Vec2(1,1)
+
+      Polygon(Seq(
+        Vec2(0.0, 0.0),
+        Vec2(1.0, 0.0),
+        Vec2(1.0, 1.0),
+        Vec2(0.0, 1.0)
+      )).cg shouldBe Vec2(0.5, 0.5)
+    }
+
+    "Rotate a polygon" in {
+      import scala.math._
+
+      def approxEquals(a: Double, b: Double): Boolean = {
+        math.abs(a - b) < 1e-9
+      }
+
+      val polygon = Polygon(Seq(
+        Vec2(0.0, 0.0),
+        Vec2(2.0, 0.0),
+        Vec2(2.0, 2.0),
+        Vec2(0.0, 2.0)
+      ))
+
+      val rotatedPolygon = polygon.rotate(degrees = 45.0)
+
+      val cgx = polygon.cg.x
+      val cgy = polygon.cg.y
+
+      approxEquals(polygon.cg.x, rotatedPolygon.cg.x) shouldBe true
+      approxEquals(polygon.cg.y, rotatedPolygon.cg.y) shouldBe true
+
+      approxEquals(rotatedPolygon.edge(0).x, 1.0) shouldBe true
+      approxEquals(rotatedPolygon.edge(0).y, -sqrt(2.0) + cgy) shouldBe true
+
+      approxEquals(rotatedPolygon.edge(1).x, sqrt(2.0) + cgx) shouldBe true
+      approxEquals(rotatedPolygon.edge(1).y, 1.0) shouldBe true
+
+      approxEquals(rotatedPolygon.edge(2).x, 1.0) shouldBe true
+      approxEquals(rotatedPolygon.edge(2).y, sqrt(2.0) + cgy) shouldBe true
+
+      approxEquals(rotatedPolygon.edge(3).x, -sqrt(2.0) + cgx) shouldBe true
+      approxEquals(rotatedPolygon.edge(3).y, 1.0) shouldBe true
     }
   }
 }
