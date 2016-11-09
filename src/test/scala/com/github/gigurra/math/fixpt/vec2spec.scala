@@ -17,8 +17,8 @@ class vec2spec
     "expose implicit methods" in {
       import com.github.gigurra.math.fixpt.vec2._
       val v1 = Vec2[Long](3,4)
-      v1.length shouldBe 5
-      v1.isZero shouldBe false
+      v1.lengthFixPt shouldBe 5
+      v1.isZeroFixPt shouldBe false
     }
   }
 }

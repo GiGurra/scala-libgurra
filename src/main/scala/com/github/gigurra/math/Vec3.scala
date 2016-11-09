@@ -39,6 +39,9 @@ case class Vec3[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](x: T
   final def toFloat: Vec3[Float] = Vec3(x.toFloat, y.toFloat, z.toFloat)
   final def toLong: Vec3[Long] = Vec3(x.toLong, y.toLong, z.toLong)
   final def toDouble: Vec3[Double] = Vec3(x.toDouble, y.toDouble, z.toDouble)
+
+  final def norm: Double = math.sqrt((this dot this).toDouble)
+  final def length: Double = norm
 }
 
 object Vec3 {

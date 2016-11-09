@@ -26,6 +26,9 @@ case class Vec2[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](x: T
   final def toFloat: Vec2[Float] = Vec2(x.toFloat, y.toFloat)
   final def toLong: Vec2[Long] = Vec2(x.toLong, y.toLong)
   final def toDouble: Vec2[Double] = Vec2(x.toDouble, y.toDouble)
+
+  final def norm: Double = math.sqrt((this dot this).toDouble)
+  final def length: Double = norm
 }
 
 object Vec2 {

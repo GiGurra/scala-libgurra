@@ -103,5 +103,11 @@ class Vec2ScalarOpsSpec
       -Vec2[Long](3L,4L) shouldBe Vec2[Long](-3L,-4L)
       -Vec2[Double](3.0,4.0) shouldBe Vec2[Double](-3.0,-4.0)
     }
+
+
+    "norm/length" in {
+      Vec2[Int](1,1).norm shouldBe math.sqrt(2.0)
+      Vec2[Int](4,3).norm shouldBe 5.0
+    }
   }
 }
