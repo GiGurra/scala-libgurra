@@ -165,4 +165,45 @@ class PolygonSpec
       approxEquals(rotatedPolygon.edge(3).y, 1.0) shouldBe true
     }
   }
+
+  "sides" in {
+    val polygon = Polygon(Seq(
+      Vec2(0.0, 0.0),
+      Vec2(2.0, 0.0),
+      Vec2(2.0, 2.0),
+      Vec2(0.0, 2.0)
+    ))
+    polygon.sides shouldBe Seq( (Vec2(0.0, 0.0), Vec2(2.0, 0.0)), (Vec2(2.0, 0.0), Vec2(2.0, 2.0)), (Vec2(2.0, 2.0), Vec2(0.0, 2.0)), (Vec2(0.0, 2.0), Vec2(0.0, 0.0)) )
+  }
+
+  "vectors" in {
+    val polygon = Polygon(Seq(
+      Vec2(0.0, 0.0),
+      Vec2(2.0, 0.0),
+      Vec2(2.0, 2.0),
+      Vec2(0.0, 2.0)
+    ))
+
+    polygon.vectors shouldBe Seq( Vec2(2.0, 0.0), Vec2(0.0, 2.0), Vec2(-2.0, 0.0), Vec2(0.0, -2.0) )
+  }
+
+  "outwardAngles for a triangle" in {
+    val polygon = Polygon(Seq(
+      Vec2(0.0, 0.0),
+      Vec2(0.0, 2.0),
+      Vec2(2.0, 0.0)
+    ))
+    polygon.outwardAngles shouldBe Seq( 315, 315, 270 )
+  }
+
+  "outwardAngles for a letter shape" in {
+    val polygon = Polygon(Seq(
+      Vec2(0.0, 0.0),
+      Vec2(0.0, 2.0),
+      Vec2(1.0, 1.0),
+      Vec2(2.0, 2.0),
+      Vec2(2.0, 0.0)
+    )).rotate(50.5)
+    polygon.outwardAngles shouldBe Seq( 315, 90, 315, 270, 270 )
+  }
 }

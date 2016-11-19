@@ -29,6 +29,8 @@ case class Vec2[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](x: T
 
   final def norm: Double = math.sqrt((this dot this).toDouble)
   final def length: Double = norm
+  final def angle: Float = (math.atan2(y.toDouble(), x.toDouble()).toDegrees.toFloat )
+  final def angleTo(otherVector: Vec2[T]): Float = (this.angle - otherVector.angle + 180 + 360) % 360
 }
 
 object Vec2 {

@@ -15,6 +15,8 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
 
   final lazy val asElementArray: Array[T] = edge.toElementArray
   final lazy val sides: Seq[(Vec2[T], Vec2[T])] = edge.sliding(2, 1).toSeq.map(p => (p.head, p(1))) ++ Seq((edge.last, edge.head))
+  final lazy val vectors: Seq[Vec2[T]] = sides.map{case (point, nextPoint) => nextPoint - point}
+  final lazy val outwardAngles: Seq[Float] = (vectors :+ vectors.head).sliding(2, 1).map{ case Seq(v1, v2) => v1 angleTo v2  } toSeq
   final lazy val cg: Vec2[T] = doCalcCg()
 
   def rotate(degrees: Double, origin: Vec2[T] = cg)(implicit double2T: Double2[T]): Polygon[T] = {

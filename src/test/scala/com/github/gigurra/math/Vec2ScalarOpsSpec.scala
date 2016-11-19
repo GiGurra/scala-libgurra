@@ -109,5 +109,30 @@ class Vec2ScalarOpsSpec
       Vec2[Int](1,1).norm shouldBe math.sqrt(2.0)
       Vec2[Int](4,3).norm shouldBe 5.0
     }
+
+    def v(x: Int, y: Int) = Vec2[Int](x, y)
+
+    "angle range is 180 to -180" in {
+      v(1,0).angle shouldBe 0.0
+      v(1, 1).angle shouldBe 45.0
+      v(1, -1).angle shouldBe -45.0
+      v(0, 1).angle shouldBe 90.0
+      v(-1, 0).angle shouldBe 180.0
+      v(0, -1).angle shouldBe -90.0
+      v(-1, -1).angle shouldBe -135.0
+    }
+
+    "outer angle to next vector" in {
+      v(0, 1) angleTo v(0, 1)  shouldBe 180.0
+      v(0, 1) angleTo v(1, 0)  shouldBe 270.0
+      v(0, 1) angleTo v(-1, 0) shouldBe 90.0
+      v(0, 1) angleTo v(-1, -1) shouldBe 45.0
+      v(-1, -1) angleTo v(0, -1) shouldBe 135.0
+      v(1, 1) angleTo v(0, -1) shouldBe 315.0
+      v(1, -1) angleTo v(-1, 0) shouldBe 315.0
+      v(-1, 0) angleTo v(1, -1) shouldBe 45.0
+    }
+
+
   }
 }
