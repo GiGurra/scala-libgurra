@@ -193,7 +193,7 @@ class PolygonSpec
       Vec2(0.0, 2.0),
       Vec2(2.0, 0.0)
     ))
-    polygon.outwardAngles shouldBe Seq( 315, 315, 270 )
+    polygon.outwardAngles shouldBe Seq( 270, 315, 315  )
   }
 
   "outwardAngles for a letter shape" in {
@@ -204,6 +204,6 @@ class PolygonSpec
       Vec2(2.0, 2.0),
       Vec2(2.0, 0.0)
     )).rotate(50.5)
-    polygon.outwardAngles shouldBe Seq( 315, 90, 315, 270, 270 )
+    polygon.outwardAngles shouldBe Seq( 270, 315, 90, 315, 270  )
   }
 }
