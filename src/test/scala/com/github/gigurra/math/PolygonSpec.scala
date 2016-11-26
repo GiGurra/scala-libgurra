@@ -194,8 +194,8 @@ class PolygonSpec
       Vec2(0.0, 2.0),
       Vec2(2.0, 0.0)
     ))
-    polygon.outwardAngles shouldBe Seq( 270.0, 225.0, 225.0  )
-    polygon.inwardAngles shouldBe Seq( 90.0, 135.0, 135.0  )
+    polygon.outwardAngles shouldBe Seq( 270.0, 315.0, 315.0  )
+    polygon.inwardAngles shouldBe Seq( 90.0, 45.0, 45.0  )
   }
 
   "outerward/inward angles for a letter shape cw" in {
@@ -208,8 +208,8 @@ class PolygonSpec
       Vec2(2.0, 0.0)
     ))
 
-    polygon.outwardAngles shouldBe Seq(270.0, 225.0, 90.0, 225.0, 270.0)
-    polygon.inwardAngles shouldBe Seq(90.0, 135.0, 270.0, 135.0, 90.0)
+    polygon.outwardAngles shouldBe Seq(270.0, 315.0, 90.0, 315.0, 270.0)
+    polygon.inwardAngles shouldBe Seq(90.0, 45.0, 270.0, 45.0, 90.0)
   }
 
   "outerward/inward angles for a triangle ccw" in {
@@ -218,8 +218,8 @@ class PolygonSpec
       Vec2(0.0, 2.0),
       Vec2(2.0, 0.0)
     ).reverse)
-    polygon.outwardAngles shouldBe Seq( 225.0, 225.0, 270.0  )
-    polygon.inwardAngles shouldBe Seq( 135.0, 135.0, 90.0  )
+    polygon.outwardAngles shouldBe Seq( 315.0, 315.0, 270.0  )
+    polygon.inwardAngles shouldBe Seq( 45.0, 45.0, 90.0  )
   }
 
   "outerward/inward angles for a letter shape ccw" in {
@@ -232,7 +232,59 @@ class PolygonSpec
       Vec2(2.0, 0.0)
     ).reverse)
 
-    polygon.outwardAngles shouldBe Seq(270.0, 225.0, 90.0, 225.0, 270.0)
-    polygon.inwardAngles shouldBe Seq(90.0, 135.0, 270.0, 135.0, 90.0)
+    polygon.outwardAngles shouldBe Seq(270.0, 315.0, 90.0, 315.0, 270.0)
+    polygon.inwardAngles shouldBe Seq(90.0, 45.0, 270.0, 45.0, 90.0)
+  }
+
+  "in a 30°–60°–90° triangle (known triangle from wikipedia)" in {
+    """
+                        B O
+                          | \
+                          |  \
+                          |   \ 2
+                  sqrt(3) |    \
+                          |     \
+                          |      \
+                        A O-------O C
+                              1
+    """.stripMargin
+
+    val sqrt3 = math.sqrt(3).toFloat
+
+    val a = Vec2[Float](0.0f, 0.0f)
+    val b = Vec2[Float](0.0f, sqrt3)
+    val c = Vec2[Float](1.0f, 0.0f)
+
+    val triangle = Polygon(Seq(a, b, c))
+
+    triangle.outwardAngles.map(math.round) shouldBe Seq(270, 330, 300)
+    triangle.inwardAngles.map(math.round) shouldBe Seq(90, 30, 60)
+
+  }
+
+  "in a 30°–60°–90° triangle (known triangle from wikipedia) reversed" in {
+    """
+                        B O
+                          | \
+                          |  \
+                          |   \ 2
+                  sqrt(3) |    \
+                          |     \
+                          |      \
+                        A O-------O C
+                              1
+    """.stripMargin
+
+    val sqrt3 = math.sqrt(3).toFloat
+
+    val a = Vec2[Float](0.0f, 0.0f)
+    val b = Vec2[Float](0.0f, sqrt3)
+    val c = Vec2[Float](1.0f, 0.0f)
+
+    val triangle = Polygon(Seq(c, b, a))
+
+    triangle.outwardAngles.map(math.round) shouldBe Seq(270, 330, 300).reverse
+    triangle.inwardAngles.map(math.round) shouldBe Seq(90, 30, 60).reverse
+
   }
 }

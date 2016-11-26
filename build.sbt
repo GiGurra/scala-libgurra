@@ -1,6 +1,6 @@
 organization := "com.github.gigurra"
 name := "libgurra"
-version := "0.2.19-SNAPSHOT"
+version := "0.2.20-SNAPSHOT"
 
 scalaVersion := "2.11.8"
 scalacOptions ++= Seq("-feature", "-unchecked", "-deprecation")

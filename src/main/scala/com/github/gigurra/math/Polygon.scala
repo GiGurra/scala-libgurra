@@ -22,8 +22,8 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
   }
   final lazy val outwardAngles: Seq[Double] = {
     def outwardAngle(v1: Vec2[T], v2: Vec2[T]): Double = {
-      if (clockwise) v2.cwAngleTo(v1)
-      else v2.ccwAngleTo(v1)
+      if (clockwise) v2.ccwAngleTo(-v1)
+      else v2.cwAngleTo(-v1)
     }
     (vectors.last +: vectors).sliding(2, 1).map{ case Seq(v1, v2) => outwardAngle(v1, v2) }.toSeq
   }
