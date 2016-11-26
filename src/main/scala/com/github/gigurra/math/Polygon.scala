@@ -51,6 +51,10 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
     )
   }
 
+  def offset(delta: Vec2[T]): Polygon[T] = {
+    Polygon(edge.map(_ + delta), clockwise, area)
+  }
+
   def slice(i1: Int, i2: Int): (Polygon[T], Polygon[T]) = {
     require(i1 >= 0, s"Start index of slice is negative")
     require(i2 >= 0, s"End index of slice is negative")
