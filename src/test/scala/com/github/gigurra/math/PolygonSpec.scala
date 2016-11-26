@@ -91,6 +91,23 @@ class PolygonSpec
       polygon.contains(Vec2(-0.00001, -0.00001)) shouldBe false
     }
 
+    "Check if point is contained (incl edge)" in {
+      val polygon = Polygon(concaveCCWVertices)
+      concaveCCWVertices.size should be > 3
+      for (pt <- concaveCCWVertices) {
+        polygon.contains(pt) shouldBe true
+      }
+    }
+
+    "Check if point is contained (excl edge)" in {
+      val polygon = Polygon(concaveCCWVertices)
+      concaveCCWVertices.size should be > 3
+      for (pt <- concaveCCWVertices) {
+        polygon.contains(pt, includeEdgePoints = false) shouldBe false
+      }
+      polygon.contains(polygon.cg, includeEdgePoints = false) shouldBe true
+    }
+
     "Check if point is contained (Square)" in {
       val polygon = Polygon(Seq(
         Vec2(0.0,0.0),
@@ -112,6 +129,58 @@ class PolygonSpec
       ))
       polygon.contains(Vec2(0.5, 0.5)) shouldBe true
       polygon.contains(Vec2(0.5, -0.5)) shouldBe false
+    }
+
+    "Polygon overlaps" in {
+
+      val arrowHead = Polygon(Seq(
+        Vec2(0.0,0.0),
+        Vec2(1.0,0.1),
+        Vec2(0.0,0.2)
+      ))
+
+      val box = Polygon(Seq(
+        Vec2(0.5,0.0),
+        Vec2(0.5,0.5),
+        Vec2(1.5,0.5),
+        Vec2(1.5,0.0)
+      ))
+
+      arrowHead.overlaps(box) shouldBe true
+      arrowHead.rotate(90).overlaps(box) shouldBe false
+
+      box.overlaps(arrowHead) shouldBe true
+      box.overlaps(arrowHead.rotate(90)) shouldBe false
+
+      box.overlaps(box) shouldBe true
+    }
+
+    "Two polygons with matching edges dont count as overlapping" in {
+
+      val box1 = Polygon(Seq(
+        Vec2(0.0,0.0),
+        Vec2(0.0,1.0),
+        Vec2(1.0,1.0),
+        Vec2(1.0,0.0)
+      ))
+
+      val box2 = Polygon(Seq(
+        Vec2(1.0,0.0),
+        Vec2(1.0,1.0),
+        Vec2(2.0,1.0),
+        Vec2(2.0,0.0)
+      ))
+
+      val box1999 = Polygon(Seq(
+        Vec2(1.0,0.0),
+        Vec2(1.0,1.0),
+        Vec2(2.0,1.0),
+        Vec2(2.0,0.0)
+      ).map(p => Vec2(p.x-0.00001, p.y)))
+
+      box1.overlaps(box2) shouldBe false
+      box1.overlaps(box1999) shouldBe true
+
     }
 
     "Calculate cg" in {

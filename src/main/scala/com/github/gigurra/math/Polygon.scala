@@ -79,8 +79,32 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
   /**
     * Not guaranteed to work for vertex coordinates
     */
-  def contains(point: Vec2[T]): Boolean = {
-    doContains(point.toDouble)
+  def contains(point: Vec2[T], includeEdgePoints: Boolean = true): Boolean = {
+    if (isEdgePoint(point)) {
+      includeEdgePoints
+    } else {
+      doContainsDouble(point.toDouble)
+    }
+  }
+
+  def resizeRelative(newRelativeSize: Double, center: Vec2[Double] = cg.toDouble): Polygon[Double] = {
+    val source = Polygon(this.edge.map(_.toDouble))
+    Polygon(source.edge.map(_ - center).map(_ * newRelativeSize).map(_ + center))
+  }
+
+  def overlaps(otherPolygon: Polygon[T], relativeTolerance: Double = 1e-6): Boolean = {
+    require(relativeTolerance > 0.0, s"relativeTolerance must be > 0.0")
+    require(relativeTolerance < 1.0, s"relativeTolerance must be < 1.0")
+    // Shrink both shapes with 1e-6
+    val thisShrunk: Polygon[Double] = this.resizeRelative(1.0 - relativeTolerance)
+    val otherShrunk: Polygon[Double] = otherPolygon.resizeRelative(1.0 - relativeTolerance)
+    thisShrunk.sides.exists(sideA => otherShrunk.sides.exists(LinesIntersect(_, sideA))) || // Any edge lines intersect
+    thisShrunk.contains(otherShrunk.edge.head) || // Points from other shape are contained in this
+    otherShrunk.contains(thisShrunk.edge.head) // Points from this shape are contained in other
+  }
+
+  def isEdgePoint(point: Vec2[T]): Boolean = {
+    edge.contains(point)
   }
 
   private def doIsCleanSlice(i1: Int, i2: Int): Boolean = {
@@ -92,16 +116,16 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
       val unscaledOrigin = edge(i1).toDouble
       val unscaledEnd = edge(i2).toDouble
       val unscaledVector = unscaledEnd - unscaledOrigin
-      val origin = unscaledOrigin + unscaledVector * 1e-7
-      val end = unscaledEnd - unscaledVector * 1e-7
+      val origin: Vec2[Double] = unscaledOrigin + unscaledVector * 1e-7
+      val end: Vec2[Double] = unscaledEnd - unscaledVector * 1e-7
       def toDouble(side: (Vec2[T], Vec2[T])): (Vec2[Double], Vec2[Double]) = (side._1.toDouble, side._2.toDouble)
-      doContains(origin) && doContains(end) && sides.map(toDouble).forall(!LinesIntersect(_, (origin, end)))
+      doContainsDouble(origin) && doContainsDouble(end) && sides.map(toDouble).forall(!LinesIntersect[Double](_, (origin, end)))
     } else {
       false
     }
   }
 
-  private def doContains(point: Vec2[Double]): Boolean =  {
+  private def doContainsDouble(point: Vec2[Double]): Boolean =  {
     var i = 0
     var j = length - 1
     var result = false
