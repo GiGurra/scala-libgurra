@@ -187,24 +187,52 @@ class PolygonSpec
     polygon.vectors shouldBe Seq( Vec2(2.0, 0.0), Vec2(0.0, 2.0), Vec2(-2.0, 0.0), Vec2(0.0, -2.0) )
   }
 
-  /*
-  "outwardAngles for a triangle" in {
+
+  "outerward/inward angles for a triangle cw" in {
     val polygon = Polygon(Seq(
       Vec2(0.0, 0.0),
       Vec2(0.0, 2.0),
       Vec2(2.0, 0.0)
     ))
-    polygon.outwardAngles shouldBe Seq( 270, 315, 315  )
+    polygon.outwardAngles shouldBe Seq( 270.0, 225.0, 225.0  )
+    polygon.inwardAngles shouldBe Seq( 90.0, 135.0, 135.0  )
   }
 
-  "outwardAngles for a letter shape" in {
+  "outerward/inward angles for a letter shape cw" in {
+
     val polygon = Polygon(Seq(
       Vec2(0.0, 0.0),
       Vec2(0.0, 2.0),
       Vec2(1.0, 1.0),
       Vec2(2.0, 2.0),
       Vec2(2.0, 0.0)
-    )).rotate(50.5)
-    polygon.outwardAngles shouldBe Seq( 270, 315, 90, 315, 270  )
-  }*/
+    ))
+
+    polygon.outwardAngles shouldBe Seq(270.0, 225.0, 90.0, 225.0, 270.0)
+    polygon.inwardAngles shouldBe Seq(90.0, 135.0, 270.0, 135.0, 90.0)
+  }
+
+  "outerward/inward angles for a triangle ccw" in {
+    val polygon = Polygon(Seq(
+      Vec2(0.0, 0.0),
+      Vec2(0.0, 2.0),
+      Vec2(2.0, 0.0)
+    ).reverse)
+    polygon.outwardAngles shouldBe Seq( 225.0, 225.0, 270.0  )
+    polygon.inwardAngles shouldBe Seq( 135.0, 135.0, 90.0  )
+  }
+
+  "outerward/inward angles for a letter shape ccw" in {
+
+    val polygon = Polygon(Seq(
+      Vec2(0.0, 0.0),
+      Vec2(0.0, 2.0),
+      Vec2(1.0, 1.0),
+      Vec2(2.0, 2.0),
+      Vec2(2.0, 0.0)
+    ).reverse)
+
+    polygon.outwardAngles shouldBe Seq(270.0, 225.0, 90.0, 225.0, 270.0)
+    polygon.inwardAngles shouldBe Seq(90.0, 135.0, 270.0, 135.0, 90.0)
+  }
 }

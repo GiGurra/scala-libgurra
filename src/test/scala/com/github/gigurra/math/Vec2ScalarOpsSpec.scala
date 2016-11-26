@@ -122,7 +122,7 @@ class Vec2ScalarOpsSpec
       v(-1, -1).angle shouldBe -135.0
     }
 
-    "outer angle to next vector" in {
+    "angle to vector" in {
       v(0, 1) angleTo v(0, 1)  shouldBe 0.0
       v(0, 1) angleTo v(1, 0)  shouldBe 90.0
       v(0, 1) angleTo v(-1, 0) shouldBe -90.0
@@ -131,6 +131,28 @@ class Vec2ScalarOpsSpec
       v(1, 1) angleTo v(0, -1) shouldBe 135.0
       v(1, -1) angleTo v(-1, 0) shouldBe 135.0
       v(-1, 0) angleTo v(1, -1) shouldBe -135.0
+    }
+
+    "cw angle to vector" in {
+      v(0, 1) cwAngleTo v(0, 1)  shouldBe 0.0
+      v(0, 1) cwAngleTo v(1, 0)  shouldBe 90.0
+      v(0, 1) cwAngleTo v(-1, 0) shouldBe 270.0
+      v(0, 1) cwAngleTo v(-1, -1) shouldBe 225.0
+      v(-1, -1) cwAngleTo v(0, -1) shouldBe 315.0
+      v(1, 1) cwAngleTo v(0, -1) shouldBe 135.0
+      v(1, -1) cwAngleTo v(-1, 0) shouldBe 135.0
+      v(-1, 0) cwAngleTo v(1, -1) shouldBe 225.0
+    }
+
+    "ccw angle to vector" in {
+      v(0, 1) ccwAngleTo v(0, 1)  shouldBe 0.0
+      v(0, 1) ccwAngleTo v(1, 0)  shouldBe 270.0
+      v(0, 1) ccwAngleTo v(-1, 0) shouldBe 90.0
+      v(0, 1) ccwAngleTo v(-1, -1) shouldBe 135.0
+      v(-1, -1) ccwAngleTo v(0, -1) shouldBe 45.0
+      v(1, 1) ccwAngleTo v(0, -1) shouldBe 225.0
+      v(1, -1) ccwAngleTo v(-1, 0) shouldBe 225.0
+      v(-1, 0) ccwAngleTo v(1, -1) shouldBe 135.0
     }
   }
 }

@@ -31,6 +31,18 @@ case class Vec2[@specialized(Int,Long,Float,Double) T : spire.math.Numeric](x: T
   final def length: Double = norm
   final def angle: Double = math.atan2(y.toDouble(), x.toDouble()).toDegrees
   final def angleTo(otherVector: Vec2[T]): Double = (this.angle - otherVector.angle).normalizeDegreesPm180
+
+  final def cwAngleTo(otherVector: Vec2[T]): Double = {
+    val thisAngle = this.angle
+    val otherAngle = otherVector.angle
+    (thisAngle - otherAngle).normalizeDegrees0360
+  }
+
+  final def ccwAngleTo(otherVector: Vec2[T]): Double = {
+    val thisAngle = this.angle
+    val otherAngle = otherVector.angle
+    (otherAngle - thisAngle).normalizeDegrees0360
+  }
 }
 
 object Vec2 {
