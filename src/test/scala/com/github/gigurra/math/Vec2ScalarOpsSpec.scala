@@ -123,16 +123,14 @@ class Vec2ScalarOpsSpec
     }
 
     "outer angle to next vector" in {
-      v(0, 1) angleTo v(0, 1)  shouldBe 180.0
-      v(0, 1) angleTo v(1, 0)  shouldBe 270.0
-      v(0, 1) angleTo v(-1, 0) shouldBe 90.0
-      v(0, 1) angleTo v(-1, -1) shouldBe 45.0
-      v(-1, -1) angleTo v(0, -1) shouldBe 135.0
-      v(1, 1) angleTo v(0, -1) shouldBe 315.0
-      v(1, -1) angleTo v(-1, 0) shouldBe 315.0
-      v(-1, 0) angleTo v(1, -1) shouldBe 45.0
+      v(0, 1) angleTo v(0, 1)  shouldBe 0.0
+      v(0, 1) angleTo v(1, 0)  shouldBe 90.0
+      v(0, 1) angleTo v(-1, 0) shouldBe -90.0
+      v(0, 1) angleTo v(-1, -1) shouldBe -135.0
+      v(-1, -1) angleTo v(0, -1) shouldBe -45.0
+      v(1, 1) angleTo v(0, -1) shouldBe 135.0
+      v(1, -1) angleTo v(-1, 0) shouldBe 135.0
+      v(-1, 0) angleTo v(1, -1) shouldBe -135.0
     }
-
-
   }
 }

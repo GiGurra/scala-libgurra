@@ -187,6 +187,7 @@ class PolygonSpec
     polygon.vectors shouldBe Seq( Vec2(2.0, 0.0), Vec2(0.0, 2.0), Vec2(-2.0, 0.0), Vec2(0.0, -2.0) )
   }
 
+  /*
   "outwardAngles for a triangle" in {
     val polygon = Polygon(Seq(
       Vec2(0.0, 0.0),
@@ -205,5 +206,5 @@ class PolygonSpec
       Vec2(2.0, 0.0)
     )).rotate(50.5)
     polygon.outwardAngles shouldBe Seq( 270, 315, 90, 315, 270  )
-  }
+  }*/
 }
