@@ -116,7 +116,11 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
     val fwdDelta = i2 - i1
     val bwdDelta = fwdDelta - n
 
-    if (fwdDelta >= 2 && bwdDelta <= -2) {
+    val segment1: Seq[Vec2[T]] = edge.slice(i1, i2+1)
+    val segment2: Seq[Vec2[T]] = (edge ++ edge).slice(i2, i2 - bwdDelta + 1)
+    val segmentAreasExist: Boolean = Polygon(segment1).area.toDouble > 0.1 && Polygon(segment2).area.toDouble > 0.1
+
+    if (fwdDelta >= 2 && bwdDelta <= -2 && segmentAreasExist) {
       val unscaledOrigin = edge(i1).toDouble
       val unscaledEnd = edge(i2).toDouble
       val unscaledVector = unscaledEnd - unscaledOrigin
