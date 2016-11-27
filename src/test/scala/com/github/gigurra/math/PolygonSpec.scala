@@ -1,5 +1,7 @@
 package com.github.gigurra.math
 
+import java.util.UUID
+
 import org.scalatest._
 import org.scalatest.mock._
 
@@ -79,6 +81,13 @@ class PolygonSpec
       original.isCleanSlice(1, 0) shouldBe false
       original.isCleanSlice(0, 1) shouldBe false
       original.isCleanSlice(5, 4) shouldBe false
+    }
+
+    "Fail to slice, when points between vertices are on the same line" in {
+      val list: Seq[Vec2[Float]] = Seq(Vec2[Float](0.0f,2.0f), Vec2[Float](0.0f,4.0f), Vec2[Float](2.0f,2.0f), Vec2[Float](4.0f,0.0f), Vec2[Float](2.0f,0.0f), Vec2[Float](1.0f,1.0f))
+      val polygon = Polygon(list)
+
+      polygon.isCleanSlice(4,0) shouldBe false
     }
 
     "Be transformed into a raw data array" in {
