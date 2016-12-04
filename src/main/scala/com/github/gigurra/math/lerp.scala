@@ -5,12 +5,12 @@ package com.github.gigurra.math
   */
 object lerp {
 
-  def apply(minInput: Float,
-            maxInput: Float,
-            input: Float,
-            minOutput: Float,
-            maxOutput: Float,
-            clamp: Boolean): Float = {
+  def apply(minInput: Double,
+            maxInput: Double,
+            input: Double,
+            minOutput: Double,
+            maxOutput: Double,
+            clamp: Boolean): Double = {
     apply(
       delta = input - minInput,
       range = maxInput - minInput,
@@ -20,19 +20,19 @@ object lerp {
     )
   }
 
-  def apply(minInput: Float,
-            maxInput: Float,
-            input: Float,
-            minOutput: Float,
-            maxOutput: Float): Float = {
+  def apply(minInput: Double,
+            maxInput: Double,
+            input: Double,
+            minOutput: Double,
+            maxOutput: Double): Double = {
     apply(minInput, maxInput, input, minOutput, maxOutput, clamp = true)
   }
 
-  def apply(delta: Float,
-            range: Float,
-            minOutput: Float,
-            maxOutput: Float,
-            clamp: Boolean): Float = {
+  def apply(delta: Double,
+            range: Double,
+            minOutput: Double,
+            maxOutput: Double,
+            clamp: Boolean): Double = {
     if (clamp && delta < 0.0f) {
       minOutput
     } else if (clamp && delta > 1.0f) {
@@ -42,10 +42,10 @@ object lerp {
     }
   }
 
-  def apply(delta: Float,
-            range: Float,
-            minOutput: Float,
-            maxOutput: Float): Float = {
+  def apply(delta: Double,
+            range: Double,
+            minOutput: Double,
+            maxOutput: Double): Double = {
     apply(delta, range, minOutput, maxOutput, clamp = true)
   }
 }
