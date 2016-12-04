@@ -35,7 +35,7 @@ object lerp {
             clamp: Boolean): Double = {
     if (clamp && delta < 0.0f) {
       minOutput
-    } else if (clamp && delta > 1.0f) {
+    } else if (clamp && delta > range) {
       maxOutput
     } else {
       minOutput + ((maxOutput - minOutput) * (delta / range))
