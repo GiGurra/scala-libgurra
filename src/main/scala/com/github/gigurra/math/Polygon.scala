@@ -30,6 +30,11 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
   final lazy val inwardAngles: Seq[Double] = outwardAngles.map(360.0 - _)
   final lazy val cg: Vec2[T] = doCalcCg()
 
+  final lazy val sliceableIndices: Map[Int, Set[Int]] = (for {
+    startIndex <- 0 to size
+    endIndices = (0 to size).filter(isCleanSlice0(startIndex, _)).toSet
+  } yield startIndex -> endIndices ) toMap
+
   def rotate(degrees: Double, origin: Vec2[T] = cg)(implicit double2T: Double2[T]): Polygon[T] = {
 
     val cos = double2T.cvt(math.cos(degrees.toRadians))
@@ -72,12 +77,7 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
     * Checks if it is possible slice this polygon from i1 to i2 without cutting through air
     */
   def isCleanSlice(i1: Int, i2: Int): Boolean = {
-    val validPoints = i1 >= 0 && i2 >= 0 && i1 < edge.length && i2 < edge.length && i1 != i2
-    validPoints && (if (i1 > i2) {
-      doIsCleanSlice(i2, i1)
-    } else {
-      doIsCleanSlice(i1, i2)
-    })
+    sliceableIndices.getOrElse(i1, Nil)(i2)
   }
 
   /**
@@ -109,6 +109,15 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
 
   def isEdgePoint(point: Vec2[T]): Boolean = {
     edge.contains(point)
+  }
+
+  private def isCleanSlice0(i1: Int, i2: Int): Boolean = {
+    val validPoints = i1 >= 0 && i2 >= 0 && i1 < edge.length && i2 < edge.length && i1 != i2
+    validPoints && (if (i1 > i2) {
+      doIsCleanSlice(i2, i1)
+    } else {
+      doIsCleanSlice(i1, i2)
+    })
   }
 
   private def doIsCleanSlice(i1: Int, i2: Int): Boolean = {
