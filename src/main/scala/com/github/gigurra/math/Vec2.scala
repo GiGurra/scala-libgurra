@@ -21,7 +21,7 @@ case class Vec2(x: Float, y: Float) {
   final def *|*(other: Vec2): Vec2 = Vec2(x * other.x, y * other.y)
   final def /|/(other: Vec2): Vec2 = Vec2(x / other.x, y / other.y)
 
-  final def norm: Float = math.sqrt((this dot this).toDouble).toFloat
+  final def norm: Float = math.sqrt(this dot this).toFloat
   final def length: Float = norm
   final def angle: Float = math.atan2(y, x).toDegrees.toFloat
   final def angleTo(otherVector: Vec2): Float = (this.angle - otherVector.angle).normalizeDegreesPm180

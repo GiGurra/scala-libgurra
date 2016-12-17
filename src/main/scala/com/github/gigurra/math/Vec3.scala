@@ -34,8 +34,8 @@ case class Vec3(x: Float, y: Float, z: Float) {
   final def /|/(other: Vec3): Vec3 = Vec3(x / other.x, y / other.y, z / other.z)
   final def toVec4: Vec4 = Vec4(x, y, z, 1.0f)
 
-  final def norm: Double = math.sqrt((this dot this).toDouble)
-  final def length: Double = norm
+  final def norm: Float = math.sqrt(this dot this).toFloat
+  final def length: Float = norm
 }
 
 object Vec3 {

@@ -31,8 +31,8 @@ case class Vec4(x: Float, y: Float, z: Float, w: Float) {
     Vec3(v.x, v.y, v.z)
   }
 
-  final def norm: Double = math.sqrt((this dot this).toDouble)
-  final def length: Double = norm
+  final def norm: Float = math.sqrt(this dot this).toFloat
+  final def length: Float = norm
 }
 
 object Vec4 {
