@@ -14,12 +14,12 @@ class PolygonSpec
   with OneInstancePerTest {
 
   val concaveCCWVertices = Seq(
-    Vec2(0.0,0.0), // 0
-    Vec2(2.0,1.0), // 1
-    Vec2(4.0,0.0), // 2
-    Vec2(4.0,4.0), // 3
-    Vec2(2.0,3.0), // 4
-    Vec2(0.0,4.0)  // 5
+    Vec2(0.0f, 0.0f), // 0
+    Vec2(2.0f, 1.0f), // 1
+    Vec2(4.0f, 0.0f), // 2
+    Vec2(4.0f, 4.0f), // 3
+    Vec2(2.0f, 3.0f), // 4
+    Vec2(0.0f, 4.0f)  // 5
   )
 
   "Polygon" should {
@@ -29,7 +29,7 @@ class PolygonSpec
       noException should be thrownBy Polygon(concaveCCWVertices.take(3))
       an[IllegalArgumentException] should be thrownBy Polygon(concaveCCWVertices.take(2))
       an[IllegalArgumentException] should be thrownBy Polygon(concaveCCWVertices.take(1))
-      an[IllegalArgumentException] should be thrownBy Polygon[Float](Seq.empty)
+      an[IllegalArgumentException] should be thrownBy Polygon(Seq.empty)
     }
 
     "Calculate ccw properly" in {
@@ -84,7 +84,7 @@ class PolygonSpec
     }
 
     "Fail to slice, when points between vertices are on the same line" in {
-      val list: Seq[Vec2[Float]] = Seq(Vec2[Float](0.0f,2.0f), Vec2[Float](0.0f,4.0f), Vec2[Float](2.0f,2.0f), Vec2[Float](4.0f,0.0f), Vec2[Float](2.0f,0.0f), Vec2[Float](1.0f,1.0f))
+      val list: Seq[Vec2] = Seq(Vec2(0.0f,2.0f), Vec2(0.0f,4.0f), Vec2(2.0f,2.0f), Vec2(4.0f,0.0f), Vec2(2.0f,0.0f), Vec2(1.0f,1.0f))
       val polygon = Polygon(list)
 
       polygon.isCleanSlice(4,0) shouldBe false
@@ -96,8 +96,8 @@ class PolygonSpec
 
     "Check if point is contained" in {
       val polygon = Polygon(concaveCCWVertices)
-      polygon.contains(Vec2(0.00001, 0.00001)) shouldBe true
-      polygon.contains(Vec2(-0.00001, -0.00001)) shouldBe false
+      polygon.contains(Vec2(0.00001f, 0.00001f)) shouldBe true
+      polygon.contains(Vec2(-0.00001f, -0.00001f)) shouldBe false
     }
 
     "Check if point is contained (incl edge)" in {
@@ -119,40 +119,40 @@ class PolygonSpec
 
     "Check if point is contained (Square)" in {
       val polygon = Polygon(Seq(
-        Vec2(0.0,0.0),
-        Vec2(1.0,0.0),
-        Vec2(1.0,1.0),
-        Vec2(0.0,1.0)
+        Vec2(0.0f, 0.0f),
+        Vec2(1.0f, 0.0f),
+        Vec2(1.0f, 1.0f),
+        Vec2(0.0f, 1.0f)
       ))
-      polygon.contains(Vec2(0.5, 0.5)) shouldBe true
-      polygon.contains(Vec2(0.5, -0.5)) shouldBe false
+      polygon.contains(Vec2(0.5f, 0.5f)) shouldBe true
+      polygon.contains(Vec2(0.5f, -0.5f)) shouldBe false
     }
 
     "Check if point is contained (Pentagon)" in {
       val polygon = Polygon(Seq(
-        Vec2(0.0,0.0),
-        Vec2(1.0,0.0),
-        Vec2(1.0,1.0),
-        Vec2(0.5,1.2),
-        Vec2(0.0,1.0)
+        Vec2(0.0f, 0.0f),
+        Vec2(1.0f, 0.0f),
+        Vec2(1.0f, 1.0f),
+        Vec2(0.5f, 1.2f),
+        Vec2(0.0f, 1.0f)
       ))
-      polygon.contains(Vec2(0.5, 0.5)) shouldBe true
-      polygon.contains(Vec2(0.5, -0.5)) shouldBe false
+      polygon.contains(Vec2(0.5f, 0.5f)) shouldBe true
+      polygon.contains(Vec2(0.5f, -0.5f)) shouldBe false
     }
 
     "Polygon overlaps" in {
 
       val arrowHead = Polygon(Seq(
-        Vec2(0.0,0.0),
-        Vec2(1.0,0.1),
-        Vec2(0.0,0.2)
+        Vec2(0.0f, 0.0f),
+        Vec2(1.0f, 0.1f),
+        Vec2(0.0f, 0.2f)
       ))
 
       val box = Polygon(Seq(
-        Vec2(0.5,0.0),
-        Vec2(0.5,0.5),
-        Vec2(1.5,0.5),
-        Vec2(1.5,0.0)
+        Vec2(0.5f, 0.0f),
+        Vec2(0.5f, 0.5f),
+        Vec2(1.5f, 0.5f),
+        Vec2(1.5f, 0.0f)
       ))
 
       arrowHead.overlaps(box) shouldBe true
@@ -167,25 +167,25 @@ class PolygonSpec
     "Two polygons with matching edges dont count as overlapping" in {
 
       val box1 = Polygon(Seq(
-        Vec2(0.0,0.0),
-        Vec2(0.0,1.0),
-        Vec2(1.0,1.0),
-        Vec2(1.0,0.0)
+        Vec2(0.0f, 0.0f),
+        Vec2(0.0f, 1.0f),
+        Vec2(1.0f, 1.0f),
+        Vec2(1.0f, 0.0f)
       ))
 
       val box2 = Polygon(Seq(
-        Vec2(1.0,0.0),
-        Vec2(1.0,1.0),
-        Vec2(2.0,1.0),
-        Vec2(2.0,0.0)
+        Vec2(1.0f, 0.0f),
+        Vec2(1.0f, 1.0f),
+        Vec2(2.0f, 1.0f),
+        Vec2(2.0f, 0.0f)
       ))
 
       val box1999 = Polygon(Seq(
-        Vec2(1.0,0.0),
-        Vec2(1.0,1.0),
-        Vec2(2.0,1.0),
-        Vec2(2.0,0.0)
-      ).map(p => Vec2(p.x-0.00001, p.y)))
+        Vec2(1.0f, 0.0f),
+        Vec2(1.0f, 1.0f),
+        Vec2(2.0f, 1.0f),
+        Vec2(2.0f, 0.0f)
+      ).map(p => Vec2(p.x-0.00001f, p.y)))
 
       box1.overlaps(box2) shouldBe false
       box1.overlaps(box1999) shouldBe true
@@ -201,28 +201,28 @@ class PolygonSpec
       )).cg shouldBe Vec2(1,1)
 
       Polygon(Seq(
-        Vec2(0.0, 0.0),
-        Vec2(1.0, 0.0),
-        Vec2(1.0, 1.0),
-        Vec2(0.0, 1.0)
-      )).cg shouldBe Vec2(0.5, 0.5)
+        Vec2(0.0f, 0.0f),
+        Vec2(1.0f, 0.0f),
+        Vec2(1.0f, 1.0f),
+        Vec2(0.0f, 1.0f)
+      )).cg shouldBe Vec2(0.5f, 0.5f)
     }
 
     "Rotate a polygon" in {
       import scala.math._
 
-      def approxEquals(a: Double, b: Double): Boolean = {
-        math.abs(a - b) < 1e-9
+      def approxEquals(a: Float, b: Float): Boolean = {
+        math.abs(a - b) < 1e-6
       }
 
       val polygon = Polygon(Seq(
-        Vec2(0.0, 0.0),
-        Vec2(2.0, 0.0),
-        Vec2(2.0, 2.0),
-        Vec2(0.0, 2.0)
+        Vec2(0.0f, 0.0f),
+        Vec2(2.0f, 0.0f),
+        Vec2(2.0f, 2.0f),
+        Vec2(0.0f, 2.0f)
       ))
 
-      val rotatedPolygon = polygon.rotate(degrees = 45.0)
+      val rotatedPolygon = polygon.rotate(degrees = 45.0f)
 
       val cgx = polygon.cg.x
       val cgy = polygon.cg.y
@@ -230,60 +230,60 @@ class PolygonSpec
       approxEquals(polygon.cg.x, rotatedPolygon.cg.x) shouldBe true
       approxEquals(polygon.cg.y, rotatedPolygon.cg.y) shouldBe true
 
-      approxEquals(rotatedPolygon.edge(0).x, 1.0) shouldBe true
-      approxEquals(rotatedPolygon.edge(0).y, -sqrt(2.0) + cgy) shouldBe true
+      approxEquals(rotatedPolygon.edge(0).x, 1.0f) shouldBe true
+      approxEquals(rotatedPolygon.edge(0).y, -sqrt(2.0).toFloat + cgy) shouldBe true
 
-      approxEquals(rotatedPolygon.edge(1).x, sqrt(2.0) + cgx) shouldBe true
-      approxEquals(rotatedPolygon.edge(1).y, 1.0) shouldBe true
+      approxEquals(rotatedPolygon.edge(1).x, sqrt(2.0).toFloat + cgx) shouldBe true
+      approxEquals(rotatedPolygon.edge(1).y, 1.0f) shouldBe true
 
-      approxEquals(rotatedPolygon.edge(2).x, 1.0) shouldBe true
-      approxEquals(rotatedPolygon.edge(2).y, sqrt(2.0) + cgy) shouldBe true
+      approxEquals(rotatedPolygon.edge(2).x, 1.0f) shouldBe true
+      approxEquals(rotatedPolygon.edge(2).y, sqrt(2.0).toFloat + cgy) shouldBe true
 
-      approxEquals(rotatedPolygon.edge(3).x, -sqrt(2.0) + cgx) shouldBe true
-      approxEquals(rotatedPolygon.edge(3).y, 1.0) shouldBe true
+      approxEquals(rotatedPolygon.edge(3).x, -sqrt(2.0).toFloat + cgx) shouldBe true
+      approxEquals(rotatedPolygon.edge(3).y, 1.0f) shouldBe true
     }
   }
 
   "sides" in {
     val polygon = Polygon(Seq(
-      Vec2(0.0, 0.0),
-      Vec2(2.0, 0.0),
-      Vec2(2.0, 2.0),
-      Vec2(0.0, 2.0)
+      Vec2(0.0f, 0.0f),
+      Vec2(2.0f, 0.0f),
+      Vec2(2.0f, 2.0f),
+      Vec2(0.0f, 2.0f)
     ))
-    polygon.sides shouldBe Seq( (Vec2(0.0, 0.0), Vec2(2.0, 0.0)), (Vec2(2.0, 0.0), Vec2(2.0, 2.0)), (Vec2(2.0, 2.0), Vec2(0.0, 2.0)), (Vec2(0.0, 2.0), Vec2(0.0, 0.0)) )
+    polygon.sides shouldBe Seq( (Vec2(0.0f, 0.0f), Vec2(2.0f, 0.0f)), (Vec2(2.0f, 0.0f), Vec2(2.0f, 2.0f)), (Vec2(2.0f, 2.0f), Vec2(0.0f, 2.0f)), (Vec2(0.0f, 2.0f), Vec2(0.0f, 0.0f)) )
   }
 
   "vectors" in {
     val polygon = Polygon(Seq(
-      Vec2(0.0, 0.0),
-      Vec2(2.0, 0.0),
-      Vec2(2.0, 2.0),
-      Vec2(0.0, 2.0)
+      Vec2(0.0f, 0.0f),
+      Vec2(2.0f, 0.0f),
+      Vec2(2.0f, 2.0f),
+      Vec2(0.0f, 2.0f)
     ))
 
-    polygon.vectors shouldBe Seq( Vec2(2.0, 0.0), Vec2(0.0, 2.0), Vec2(-2.0, 0.0), Vec2(0.0, -2.0) )
+    polygon.vectors shouldBe Seq( Vec2(2.0f, 0.0f), Vec2(0.0f, 2.0f), Vec2(-2.0f, 0.0f), Vec2(0.0f, -2.0f) )
   }
 
 
   "outerward/inward angles for a triangle cw" in {
     val polygon = Polygon(Seq(
-      Vec2(0.0, 0.0),
-      Vec2(0.0, 2.0),
-      Vec2(2.0, 0.0)
+      Vec2(0.0f, 0.0f),
+      Vec2(0.0f, 2.0f),
+      Vec2(2.0f, 0.0f)
     ))
-    polygon.outwardAngles shouldBe Seq( 270.0, 315.0, 315.0  )
-    polygon.inwardAngles shouldBe Seq( 90.0, 45.0, 45.0  )
+    polygon.outwardAngles shouldBe Seq( 270.0f, 315.0f, 315.0f  )
+    polygon.inwardAngles shouldBe Seq( 90.0f, 45.0f, 45.0f  )
   }
 
   "outerward/inward angles for a letter shape cw" in {
 
     val polygon = Polygon(Seq(
-      Vec2(0.0, 0.0),
-      Vec2(0.0, 2.0),
-      Vec2(1.0, 1.0),
-      Vec2(2.0, 2.0),
-      Vec2(2.0, 0.0)
+      Vec2(0.0f, 0.0f),
+      Vec2(0.0f, 2.0f),
+      Vec2(1.0f, 1.0f),
+      Vec2(2.0f, 2.0f),
+      Vec2(2.0f, 0.0f)
     ))
 
     polygon.outwardAngles shouldBe Seq(270.0, 315.0, 90.0, 315.0, 270.0)
@@ -292,9 +292,9 @@ class PolygonSpec
 
   "outerward/inward angles for a triangle ccw" in {
     val polygon = Polygon(Seq(
-      Vec2(0.0, 0.0),
-      Vec2(0.0, 2.0),
-      Vec2(2.0, 0.0)
+      Vec2(0.0f, 0.0f),
+      Vec2(0.0f, 2.0f),
+      Vec2(2.0f, 0.0f)
     ).reverse)
     polygon.outwardAngles shouldBe Seq( 315.0, 315.0, 270.0  )
     polygon.inwardAngles shouldBe Seq( 45.0, 45.0, 90.0  )
@@ -303,11 +303,11 @@ class PolygonSpec
   "outerward/inward angles for a letter shape ccw" in {
 
     val polygon = Polygon(Seq(
-      Vec2(0.0, 0.0),
-      Vec2(0.0, 2.0),
-      Vec2(1.0, 1.0),
-      Vec2(2.0, 2.0),
-      Vec2(2.0, 0.0)
+      Vec2(0.0f, 0.0f),
+      Vec2(0.0f, 2.0f),
+      Vec2(1.0f, 1.0f),
+      Vec2(2.0f, 2.0f),
+      Vec2(2.0f, 0.0f)
     ).reverse)
 
     polygon.outwardAngles shouldBe Seq(270.0, 315.0, 90.0, 315.0, 270.0)
@@ -329,9 +329,9 @@ class PolygonSpec
 
     val sqrt3 = math.sqrt(3).toFloat
 
-    val a = Vec2[Float](0.0f, 0.0f)
-    val b = Vec2[Float](0.0f, sqrt3)
-    val c = Vec2[Float](1.0f, 0.0f)
+    val a = Vec2(0.0f, 0.0f)
+    val b = Vec2(0.0f, sqrt3)
+    val c = Vec2(1.0f, 0.0f)
 
     val triangle = Polygon(Seq(a, b, c))
 
@@ -355,9 +355,9 @@ class PolygonSpec
 
     val sqrt3 = math.sqrt(3).toFloat
 
-    val a = Vec2[Float](0.0f, 0.0f)
-    val b = Vec2[Float](0.0f, sqrt3)
-    val c = Vec2[Float](1.0f, 0.0f)
+    val a = Vec2(0.0f, 0.0f)
+    val b = Vec2(0.0f, sqrt3)
+    val c = Vec2(1.0f, 0.0f)
 
     val triangle = Polygon(Seq(c, b, a))
 

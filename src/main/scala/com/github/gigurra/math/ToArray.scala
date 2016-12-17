@@ -1,17 +1,15 @@
 package com.github.gigurra.math
 
-import com.github.gigurra.lang.{FixErasure2, FixErasure3, FixErasure4}
-
-import scala.reflect.ClassTag
+import com.github.gigurra.lang._
 
 /**
   * Created by johan on 2016-10-24.
   */
 object ToArray {
 
-  def apply[@specialized(Int,Long,Float,Double) T : ClassTag : FixErasure2](vec2s: Seq[Vec2[T]]): Array[T] = {
+  def apply(vec2s: Seq[Vec2])(implicit f: FixErasure2[_]): Array[Float] = {
     val n = vec2s.length * 2
-    val out = new Array[T](n)
+    val out = new Array[Float](n)
     var i = 0
     val iMax = vec2s.length
     while(i < iMax) {
@@ -22,9 +20,9 @@ object ToArray {
     out
   }
 
-  def apply[@specialized(Int,Long,Float,Double) T : ClassTag : FixErasure3](vec3s: Seq[Vec3[T]]): Array[T] = {
+  def apply(vec3s: Seq[Vec3])(implicit f: FixErasure3[_]): Array[Float] = {
     val n = vec3s.length * 3
-    val out = new Array[T](n)
+    val out = new Array[Float](n)
     var i = 0
     val iMax = vec3s.length
     while(i < iMax) {
@@ -36,9 +34,9 @@ object ToArray {
     out
   }
 
-  def apply[@specialized(Int,Long,Float,Double) T : ClassTag : FixErasure4](vec4s: Seq[Vec4[T]]): Array[T] = {
+  def apply(vec4s: Seq[Vec4])(implicit f: FixErasure4[_]): Array[Float] = {
     val n = vec4s.length * 4
-    val out = new Array[T](n)
+    val out = new Array[Float](n)
     var i = 0
     val iMax = vec4s.length
     while(i < iMax) {

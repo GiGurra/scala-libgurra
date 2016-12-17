@@ -1,16 +1,13 @@
 package com.github.gigurra.math
 
-import spire.math.Numeric
-import spire.implicits._
-
 /**
   * Created by johan on 2016-10-24.
   * extracted from Java AWT.Line2D
   */
 object LinesIntersect {
 
-  def apply[@specialized(Int,Long,Float,Double) T : Numeric](line1: (Vec2[T], Vec2[T]),
-                                                             line2: (Vec2[T], Vec2[T])): Boolean = {
+  def apply(line1: (Vec2, Vec2),
+            line2: (Vec2, Vec2)): Boolean = {
     apply(
       x1 = line1._1.x,
       y1 = line1._1.y,
@@ -46,24 +43,24 @@ object LinesIntersect {
     *         each other; <code>false</code> otherwise.
     * @since 1.2
     */
-  def apply[@specialized(Int,Long,Float,Double) T : Numeric](x1: T,
-                                                             y1: T,
-                                                             x2: T,
-                                                             y2: T,
-                                                             x3: T,
-                                                             y3: T,
-                                                             x4: T,
-                                                             y4: T): Boolean = {
+  def apply(x1: Float,
+            y1: Float,
+            x2: Float,
+            y2: Float,
+            x3: Float,
+            y3: Float,
+            x4: Float,
+            y4: Float): Boolean = {
     (relativeCCW(x1, y1, x2, y2, x3, y3) * relativeCCW(x1, y1, x2, y2, x4, y4) <= 0) &&
       (relativeCCW(x3, y3, x4, y4, x1, y1) * relativeCCW(x3, y3, x4, y4, x2, y2) <= 0)
   }
 
-  private def relativeCCW[@specialized(Int,Long,Float,Double) T : Numeric](_x1: T,
-                                                                           _y1: T,
-                                                                           _x2: T,
-                                                                           _y2: T,
-                                                                           _px: T,
-                                                                           _py: T): Int = {
+  private def relativeCCW(_x1: Float,
+                          _y1: Float,
+                          _x2: Float,
+                          _y2: Float,
+                          _px: Float,
+                          _py: Float): Int = {
 
     var x1 = _x1
     var x2 = _x2
@@ -76,8 +73,8 @@ object LinesIntersect {
     y2 -= y1
     px -= x1
     py -= y1
-    var ccw: T = px * y2 - py * x2
-    if (ccw == Zero[T]) {
+    var ccw: Float = px * y2 - py * x2
+    if (ccw == 0.0f) {
       // The point is colinear, classify based on which side of
       // the segment the point falls on.  We can calculate a
       // relative value using the projection of px,py onto the
@@ -85,7 +82,7 @@ object LinesIntersect {
       // outside of the segment in the direction of the particular
       // endpoint used as the origin for the projection.
       ccw = px * x2 + py * y2
-      if (ccw > Zero[T]) {
+      if (ccw > 0.0f) {
         // Reverse the projection to be relative to the original x2,y2
         // x2 and y2 are simply negated.
         // px and py need to have (x2 - x1) or (y2 - y1) subtracted
@@ -96,11 +93,11 @@ object LinesIntersect {
         px -= x2
         py -= y2
         ccw = px * x2 + py * y2
-        if (ccw < Zero[T]) ccw = Zero[T]
+        if (ccw < 0.0f) ccw = 0.0f
       }
     }
-    if (ccw < Zero[T]) -1
-    else if (ccw > Zero[T]) 1
+    if (ccw < 0.0f) -1
+    else if (ccw > 0.0f) 1
     else 0
   }
 }

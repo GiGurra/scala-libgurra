@@ -14,36 +14,36 @@ class LerpSpec
   "Lerp" should {
 
     "lerp zero" in {
-      lerp(delta = 0, range = 3.0, 0.0, 2.0) shouldBe 0.0
+      lerp(delta = 0f, range = 3.0f, 0.0f, 2.0f) shouldBe 0.0f
     }
 
     "lerp half" in {
-      lerp(delta = 1.5, range = 3.0, 0.0, 2.0) shouldBe 1.0
+      lerp(delta = 1.5f, range = 3.0f, 0.0f, 2.0f) shouldBe 1.0f
     }
 
     "lerp full" in {
-      lerp(delta = 4.5, range = 4.5, 0.0, 2.0) shouldBe 2.0
+      lerp(delta = 4.5f, range = 4.5f, 0.0f, 2.0f) shouldBe 2.0f
     }
 
     "lerp zero Vec2" in {
-      val min = Vec2(2.0, 6.0)
-      val max = Vec2(4.0, 8.0)
+      val min = Vec2(2.0f, 6.0f)
+      val max = Vec2(4.0f, 8.0f)
 
-      lerp(delta = 0, range = 3.0, min, max, clamp = false) shouldBe min
+      lerp(delta = 0f, range = 3.0f, min, max, clamp = false) shouldBe min
     }
 
     "lerp half Vec2" in {
-      val min = Vec2(2.0, 6.0)
-      val max = Vec2(4.0, 8.0)
+      val min = Vec2(2.0f, 6.0f)
+      val max = Vec2(4.0f, 8.0f)
 
-      lerp(delta = 1.5, range = 3.0, min, max, clamp = false) shouldBe ((min + max) / 2.0)
+      lerp(delta = 1.5f, range = 3.0f, min, max, clamp = false) shouldBe ((min + max) / 2.0f)
     }
 
     "lerp full Vec2" in {
-      val min = Vec2(2.0, 6.0)
-      val max = Vec2(4.0, 8.0)
+      val min = Vec2(2.0f, 6.0f)
+      val max = Vec2(4.0f, 8.0f)
 
-      lerp(delta = 3.0, range = 3.0, min, max, clamp = false) shouldBe max
+      lerp(delta = 3.0f, range = 3.0f, min, max, clamp = false) shouldBe max
     }
   }
 }

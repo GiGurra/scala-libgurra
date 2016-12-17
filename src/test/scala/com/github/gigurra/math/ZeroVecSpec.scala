@@ -14,17 +14,17 @@ class ZeroVecSpec
   "ZeroVec" should {
 
     "have Vec2.zero api" in {
-      val vz: Vec2[Float] = Vec2.zero
+      val vz: Vec2 = Vec2.zero
       vz shouldBe Vec2(0.0f, 0.0f)
     }
 
     "Convert tuple3 to vec3" in {
-      val vz: Vec3[Float] = Vec3.zero
+      val vz: Vec3 = Vec3.zero
       vz shouldBe Vec3(0.0f, 0.0f, 0.0f)
     }
 
     "Convert tuple4 to vec4" in {
-      val vz: Vec4[Float] = Vec4.zero
+      val vz: Vec4 = Vec4.zero
       vz shouldBe Vec4(0.0f, 0.0f, 0.0f, 1.0f)
     }
 

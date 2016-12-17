@@ -1,66 +1,63 @@
 package com.github.gigurra.math
 
-import spire.math.Numeric
-import spire.implicits._
-
-import scala.reflect.ClassTag
 import scala.language.postfixOps
 
 /**
   * Created by johan on 2016-10-24.
   */
-case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](edge: Seq[Vec2[T]],
-                                                                               clockwise: Boolean,
-                                                                               area: T) {
+case class Polygon(edge: Seq[Vec2],
+                   clockwise: Boolean,
+                   area: Float) {
   require(edge.length >= 3, s"Polygon of less than 3 points")
 
-  final lazy val asElementArray: Array[T] = edge.toElementArray
-  final lazy val sides: Seq[(Vec2[T], Vec2[T])] = edge.sliding(2, 1).toSeq.map(p => (p.head, p(1))) ++ Seq((edge.last, edge.head))
-  final lazy val vectors: Seq[Vec2[T]] = sides.map{case (point, nextPoint) => nextPoint - point}
-  final lazy val angleDeltas: Seq[Double] = {
+  final lazy val asElementArray: Array[Float] = edge.toElementArray
+  final lazy val sides: Seq[(Vec2, Vec2)] = edge.sliding(2, 1).toSeq.map(p => (p.head, p(1))) ++ Seq((edge.last, edge.head))
+  final lazy val vectors: Seq[Vec2] = sides.map{case (point, nextPoint) => nextPoint - point}
+  final lazy val angleDeltas: Seq[Float] = {
     (vectors.last +: vectors).sliding(2, 1).map{ case Seq(v1, v2) => v1.angleTo(v2) }.toSeq
   }
-  final lazy val outwardAngles: Seq[Double] = {
-    def outwardAngle(v1: Vec2[T], v2: Vec2[T]): Double = {
+
+  final lazy val outwardAngles: Seq[Float] = {
+    def outwardAngle(v1: Vec2, v2: Vec2): Float = {
       if (clockwise) v2.ccwAngleTo(-v1)
       else v2.cwAngleTo(-v1)
     }
     (vectors.last +: vectors).sliding(2, 1).map{ case Seq(v1, v2) => outwardAngle(v1, v2) }.toSeq
   }
-  final lazy val inwardAngles: Seq[Double] = outwardAngles.map(360.0 - _)
-  final lazy val cg: Vec2[T] = doCalcCg()
+  final lazy val inwardAngles: Seq[Float] = outwardAngles.map(360.0f - _)
+  final lazy val cg: Vec2 = doCalcCg()
 
   final lazy val sliceableIndices: Map[Int, Set[Int]] = (for {
     startIndex <- 0 to size
     endIndices = (0 to size).filter(isCleanSlice0(startIndex, _)).toSet
   } yield startIndex -> endIndices ) toMap
 
-  def rotate(degrees: Double, origin: Vec2[T] = cg)(implicit double2T: Double2[T]): Polygon[T] = {
+  def rotate(degrees: Float, origin: Vec2 = cg): Polygon = {
 
-    val cos = double2T.cvt(math.cos(degrees.toRadians))
-    val sin = double2T.cvt(math.sin(degrees.toRadians))
+    val cos = math.cos(degrees.toRadians).toFloat
+    val sin = math.sin(degrees.toRadians).toFloat
 
-    def rotateVertex(vertex: Vec2[T]): Vec2[T] = {
+    def rotateVertex(vertex: Vec2): Vec2 = {
       val localX = vertex.x - origin.x
       val localY = vertex.y - origin.y
-      new Vec2[T](
+      new Vec2(
         x = cos * localX - sin * localY + origin.x,
         y = sin * localX + cos * localY + origin.y
       )
     }
 
-    new Polygon[T](
+    new Polygon(
       edge = edge.map(rotateVertex),
       clockwise = clockwise,
       area = area
     )
   }
 
-  def offset(delta: Vec2[T]): Polygon[T] = {
+  def offset(delta: Vec2): Polygon = {
     Polygon(edge.map(_ + delta), clockwise, area)
   }
 
-  def slice(i1: Int, i2: Int): (Polygon[T], Polygon[T]) = {
+  def slice(i1: Int, i2: Int): (Polygon, Polygon) = {
     require(i1 >= 0, s"Start index of slice is negative")
     require(i2 >= 0, s"End index of slice is negative")
     require(i1 < edge.length, s"Start index is >= edge.length")
@@ -83,31 +80,30 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
   /**
     * Not guaranteed to work for vertex coordinates
     */
-  def contains(point: Vec2[T], includeEdgePoints: Boolean = true): Boolean = {
+  def contains(point: Vec2, includeEdgePoints: Boolean = true): Boolean = {
     if (isEdgePoint(point)) {
       includeEdgePoints
     } else {
-      doContainsDouble(point.toDouble)
+      doContains(point)
     }
   }
 
-  def resizeRelative(newRelativeSize: Double, center: Vec2[Double] = cg.toDouble): Polygon[Double] = {
-    val source = Polygon(this.edge.map(_.toDouble))
-    Polygon(source.edge.map(_ - center).map(_ * newRelativeSize).map(_ + center))
+  def resizeRelative(newRelativeSize: Float, center: Vec2 = cg): Polygon = {
+    Polygon(this.edge.map(_ - center).map(_ * newRelativeSize).map(_ + center))
   }
 
-  def overlaps(otherPolygon: Polygon[T], relativeTolerance: Double = 1e-6): Boolean = {
+  def overlaps(otherPolygon: Polygon, relativeTolerance: Float = 1e-6f): Boolean = {
     require(relativeTolerance > 0.0, s"relativeTolerance must be > 0.0")
     require(relativeTolerance < 1.0, s"relativeTolerance must be < 1.0")
     // Shrink both shapes with 1e-6
-    val thisShrunk: Polygon[Double] = this.resizeRelative(1.0 - relativeTolerance)
-    val otherShrunk: Polygon[Double] = otherPolygon.resizeRelative(1.0 - relativeTolerance)
+    val thisShrunk: Polygon = this.resizeRelative(1.0f - relativeTolerance)
+    val otherShrunk: Polygon = otherPolygon.resizeRelative(1.0f - relativeTolerance)
     thisShrunk.sides.exists(sideA => otherShrunk.sides.exists(LinesIntersect(_, sideA))) || // Any edge lines intersect
     thisShrunk.contains(otherShrunk.edge.head) || // Points from other shape are contained in this
     otherShrunk.contains(thisShrunk.edge.head) // Points from this shape are contained in other
   }
 
-  def isEdgePoint(point: Vec2[T]): Boolean = {
+  def isEdgePoint(point: Vec2): Boolean = {
     edge.contains(point)
   }
 
@@ -125,30 +121,29 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
     val fwdDelta = i2 - i1
     val bwdDelta = fwdDelta - n
 
-    val segment1: Seq[Vec2[T]] = edge.slice(i1, i2+1)
-    val segment2: Seq[Vec2[T]] = (edge ++ edge).slice(i2, i2 - bwdDelta + 1)
+    val segment1: Seq[Vec2] = edge.slice(i1, i2+1)
+    val segment2: Seq[Vec2] = (edge ++ edge).slice(i2, i2 - bwdDelta + 1)
     def segmentAreasExist: Boolean = Polygon(segment1).area.toDouble > 0.1 && Polygon(segment2).area.toDouble > 0.1
 
     if (fwdDelta >= 2 && bwdDelta <= -2 && segmentAreasExist) {
-      val unscaledOrigin = edge(i1).toDouble
-      val unscaledEnd = edge(i2).toDouble
+      val unscaledOrigin = edge(i1)
+      val unscaledEnd = edge(i2)
       val unscaledVector = unscaledEnd - unscaledOrigin
-      val origin: Vec2[Double] = unscaledOrigin + unscaledVector * 1e-7
-      val end: Vec2[Double] = unscaledEnd - unscaledVector * 1e-7
-      def toDouble(side: (Vec2[T], Vec2[T])): (Vec2[Double], Vec2[Double]) = (side._1.toDouble, side._2.toDouble)
-      doContainsDouble(origin) && doContainsDouble(end) && sides.map(toDouble).forall(!LinesIntersect[Double](_, (origin, end)))
+      val origin: Vec2 = unscaledOrigin + unscaledVector * 1e-7f
+      val end: Vec2 = unscaledEnd - unscaledVector * 1e-7f
+      doContains(origin) && doContains(end) && sides.forall(!LinesIntersect(_, (origin, end)))
     } else {
       false
     }
   }
 
-  private def doContainsDouble(point: Vec2[Double]): Boolean =  {
+  private def doContains(point: Vec2): Boolean =  {
     var i = 0
     var j = length - 1
     var result = false
     while (i < edge.length) {
-      if ((edge(i).y.toDouble > point.y) != (edge(j).y.toDouble > point.y) &&
-        (point.x < (edge(j).x.toDouble - edge(i).x.toDouble) * (point.y - edge(i).y.toDouble) / (edge(j).y.toDouble - edge(i).y.toDouble) + edge(i).x.toDouble)) {
+      if ((edge(i).y > point.y) != (edge(j).y > point.y) &&
+        (point.x < (edge(j).x - edge(i).x) * (point.y - edge(i).y) / (edge(j).y - edge(i).y) + edge(i).x)) {
         result = !result
       }
       j = i
@@ -160,7 +155,7 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
   /**
     * Here we know i2 > i1, as this was verified in slice(..)
     */
-  private def doSlice(i1: Int, i2: Int): (Polygon[T], Polygon[T]) = {
+  private def doSlice(i1: Int, i2: Int): (Polygon, Polygon) = {
     val n = edge.length
     val fwdDelta = i2 - i1
     val bwdDelta = fwdDelta - n
@@ -176,9 +171,9 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
   /**
     * Taken from http://stackoverflow.com/questions/5271583/center-of-gravity-of-a-polygon
     */
-  private def doCalcCg(): Vec2[T] = {
-    var sum = Zero[T]
-    var vsum: Vec2[T] = Vec2.zero
+  private def doCalcCg(): Vec2 = {
+    var sum = 0.0f
+    var vsum: Vec2 = Vec2.zero
 
     var i = 0
     while (i < edge.length) {
@@ -202,20 +197,20 @@ case class Polygon[@specialized(Int,Long,Float,Double) T : Numeric : ClassTag](e
 
 object Polygon {
 
-  def apply[@specialized(Int,Long,Float,Double) T : Numeric: ClassTag](edge: Seq[Vec2[T]]): Polygon[T] = {
+  def apply(edge: Seq[Vec2]): Polygon = {
     require(edge.length >= 3, s"Polygon is less than 3 points")
     val w = clockwiseWeight(edge)
-    new Polygon[T](edge, w > Zero[T], w.abs() / Two[T])
+    new Polygon(edge, w > 0.0f, math.abs(w) / 2.0f)
   }
 
   // See http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
-  def clockwiseWeight[@specialized(Int,Long,Float,Double) T : Numeric](edge: Seq[Vec2[T]]): T = {
+  def clockwiseWeight(edge: Seq[Vec2]): Float = {
     require(edge.length >= 3, s"Polygon is less than 3 points")
-    var sum = Zero[T]
+    var sum = 0.0f
     val n = edge.length
     var i = 0
 
-    def segment(i1: Int, i2: Int): T = {
+    def segment(i1: Int, i2: Int): Float = {
       val v1 = edge(i1)
       val v2 = edge(i2)
       (v2.x - v1.x) * (v2.y + v1.y)
@@ -234,11 +229,11 @@ object Polygon {
   /**
     * Checks that a slice did not go through air
     */
-  def isCompleteSlice[@specialized(Int,Long,Float,Double) T : Numeric](original: Polygon[T],
-                                                                       piece1: Polygon[T],
-                                                                       piece2: Polygon[T],
-                                                                       i1: Int,
-                                                                       i2: Int): Boolean = {
+  def isCompleteSlice(original: Polygon,
+                      piece1: Polygon,
+                      piece2: Polygon,
+                      i1: Int,
+                      i2: Int): Boolean = {
     if (i1 > i2) {
       doIsCompleteSlice(original, piece1, piece2, i2, i1)
     } else {
@@ -249,19 +244,19 @@ object Polygon {
   /**
     * Checks that a slice did not go through air, where i2 is guaranteed to be > i1
     */
-  private def doIsCompleteSlice[@specialized(Int,Long,Float,Double) T : Numeric](original: Polygon[T],
-                                                                                 piece1: Polygon[T],
-                                                                                 piece2: Polygon[T],
-                                                                                 i1: Int,
-                                                                                 i2: Int): Boolean = {
-    val areaEpsilon = original.area / implicitly[Numeric[T]].pow(10, 5)
+  private def doIsCompleteSlice(original: Polygon,
+                                piece1: Polygon,
+                                piece2: Polygon,
+                                i1: Int,
+                                i2: Int): Boolean = {
+    val areaEpsilon = original.area / math.pow(10, 5).toFloat
     val cuttingEdge = (original.edge(i1), original.edge(i2))
-    def hasCuttingEdgeVertex(line: (Vec2[T], Vec2[T])): Boolean = {
+    def hasCuttingEdgeVertex(line: (Vec2, Vec2)): Boolean = {
       // These can by definition never intersect
       line._1 == cuttingEdge._1 || line._1 == cuttingEdge._2 || line._2 == cuttingEdge._1 || line._2 == cuttingEdge._2
     }
-    def noLineCross(piece: Polygon[T]): Boolean = piece.sides.filterNot(hasCuttingEdgeVertex).forall(!LinesIntersect(_, cuttingEdge))
-    def areasAlmostSame: Boolean = (piece1.area + piece2.area - original.area).abs() <= areaEpsilon
+    def noLineCross(piece: Polygon): Boolean = piece.sides.filterNot(hasCuttingEdgeVertex).forall(!LinesIntersect(_, cuttingEdge))
+    def areasAlmostSame: Boolean = math.abs(piece1.area + piece2.area - original.area) <= areaEpsilon
     areasAlmostSame && noLineCross(piece1) && noLineCross(piece2)
   }
 }
