@@ -123,7 +123,9 @@ case class Polygon(edge: Seq[Vec2],
 
     val segment1: Seq[Vec2] = edge.slice(i1, i2+1)
     val segment2: Seq[Vec2] = (edge ++ edge).slice(i2, i2 - bwdDelta + 1)
-    def segmentAreasExist: Boolean = Polygon(segment1).area.toDouble > 0.1 && Polygon(segment2).area.toDouble > 0.1
+
+    val areaEpsilon = area * 1e-4f
+    def segmentAreasExist: Boolean = Polygon(segment1).area > areaEpsilon && Polygon(segment2).area > areaEpsilon
 
     if (fwdDelta >= 2 && bwdDelta <= -2 && segmentAreasExist) {
       val unscaledOrigin = edge(i1)
