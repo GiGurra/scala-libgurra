@@ -1,5 +1,31 @@
 package com.github.gigurra.math
 
+
+/**
+  * Returns intersection point of two lines (endless), give the lines directs and a point on each line.
+  * If lines are parallel, None is returned.
+  */
+object LinesIntersectionPoint {
+  def apply(
+     point1: Vec2, directionVector1: Vec2,
+     point2: Vec2, directionVector2: Vec2): Option[Vec2] = {
+
+    if (directionVector1/directionVector1.norm == directionVector2/directionVector2.norm) {
+      None
+    } else {
+        val c = point1 - point2
+        //  equation: point1 + t1 * directionVector1 = point2 + t2 * directionVector2
+        //  point1 - poin2 + t1 * directionVector1 = point2 + t2 * directionVector2
+        //  cx * d2y - cy * d2x = t1 * ( d1y * d2x - d1x * d2y )
+
+        val  t1 = (c.x * directionVector2.y - c.y * directionVector2.x) / ( directionVector1.y * directionVector2.x - directionVector1.x * directionVector2.y )
+
+        Some(point1 + directionVector1 * t1)
+      }
+    }
+
+  }
+
 /**
   * Created by johan on 2016-10-24.
   * extracted from Java AWT.Line2D
