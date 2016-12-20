@@ -16,6 +16,20 @@ case class Polygon(edge: Seq[Vec2],
   final lazy val angleDeltas: Seq[Float] = {
     (vectors.last +: vectors).sliding(2, 1).map{ case Seq(v1, v2) => v1.angleTo(v2) }.toSeq
   }
+  final lazy val bounds: Box2 = {
+    val xValues = edge.map(_.x)
+    val yValues = edge.map(_.y)
+    val xMin = xValues.min
+    val xMax = xValues.max
+    val yMin = yValues.min
+    val yMax = yValues.max
+    Box2(
+      x = xMin,
+      y = yMin,
+      width = xMax - xMin,
+      height = yMax - yMin
+    )
+  }
 
   final lazy val outwardAngles: Seq[Float] = {
     def outwardAngle(v1: Vec2, v2: Vec2): Float = {

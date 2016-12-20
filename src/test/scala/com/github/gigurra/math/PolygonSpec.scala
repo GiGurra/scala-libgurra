@@ -314,6 +314,19 @@ class PolygonSpec
     polygon.inwardAngles shouldBe Seq(90.0, 45.0, 270.0, 45.0, 90.0)
   }
 
+  "Bounds" in {
+
+    val polygon = Polygon(Seq(
+      Vec2(0.0f, 0.0f),
+      Vec2(0.0f, 2.0f),
+      Vec2(1.0f, 1.0f),
+      Vec2(2.0f, 2.0f),
+      Vec2(2.0f, 0.0f)
+    ).reverse)
+
+    polygon.bounds shouldBe Box2(0.0f, 0.0f, 2.0f, 2.0f)
+  }
+
   "in a 30°–60°–90° triangle (known triangle from wikipedia)" in {
     """
                         B O
