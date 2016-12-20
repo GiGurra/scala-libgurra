@@ -201,6 +201,20 @@ class PolygonSpec
       )).cg shouldBe Vec2(1,1)
 
       Polygon(Seq(
+        Vec2(0, 0),
+        Vec2(20, 0),
+        Vec2(20, 2),
+        Vec2(0, 2)
+      )).cg shouldBe Vec2(10,1)
+
+      Polygon(Seq(
+        Vec2(0, 0),
+        Vec2(2, 0),
+        Vec2(2, 20),
+        Vec2(0, 20)
+      )).cg shouldBe Vec2(1,10)
+
+      Polygon(Seq(
         Vec2(0.0f, 0.0f),
         Vec2(1.0f, 0.0f),
         Vec2(1.0f, 1.0f),
