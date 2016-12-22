@@ -6,7 +6,7 @@ import org.scalatest._
 /**
   * Created by gabriel on 2016-12-19.
   */
-class LinesIntersectionPoint$Test extends WordSpec with Matchers {
+class LinesIntersectionPointTest extends WordSpec with Matchers {
   "LinesIntersectionPoint" should {
 
     "find intersection for non parallel lines" in {
@@ -36,10 +36,10 @@ class LinesIntersectionPoint$Test extends WordSpec with Matchers {
 
     "return None if lines are parallel" in {
       val p1 = Vec2(1, 0)
-      val p2 = Vec2(4, 4)
+      val p2 = Vec2(-4, -4)
 
       val d1 = Vec2(1,1)
-      val d2 = Vec2(4,4)
+      val d2 = Vec2(-4,-4)
 
       val point: Option[Vec2] = LinesIntersectionPoint(point1 = p1, directionVector1 =
         d1, point2 = p2,

@@ -10,7 +10,11 @@ object LinesIntersectionPoint {
      point1: Vec2, directionVector1: Vec2,
      point2: Vec2, directionVector2: Vec2): Option[Vec2] = {
 
-    if (directionVector1/directionVector1.norm == directionVector2/directionVector2.norm) {
+    def areParallel: Boolean = {
+      val diff = math.abs(directionVector1 dot directionVector2) - directionVector1.norm * directionVector2.norm
+      math.abs(diff) < 1e-6
+    }
+    if (areParallel) {
       None
     } else {
         val c = point1 - point2
