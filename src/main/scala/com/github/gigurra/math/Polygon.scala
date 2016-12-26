@@ -5,17 +5,17 @@ import scala.language.postfixOps
 /**
   * Created by johan on 2016-10-24.
   */
-case class Polygon(edge: Seq[Vec2],
+case class Polygon(edge: Vector[Vec2],
                    clockwise: Boolean,
                    area: Float) {
   require(edge.length >= 3, s"Polygon of less than 3 points")
 
   final lazy val asElementArray: Array[Float] = edge.toElementArray
-  final lazy val sides: Seq[(Vec2, Vec2)] = edge.sliding(2, 1).toSeq.map(p => (p.head, p(1))) ++ Seq((edge.last, edge.head))
-  final lazy val vectors: Seq[Vec2] = sides.map{case (point, nextPoint) => nextPoint - point}
-  final lazy val angleDeltas: Seq[Float] = {
-    (vectors.last +: vectors).sliding(2, 1).map{ case Seq(v1, v2) => v1.angleTo(v2) }.toSeq
-  }
+  final lazy val sides: Vector[(Vec2, Vec2)] = (edge.sliding(2, 1).map(p => (p.head, p(1))) ++ Vector((edge.last, edge.head))).toVector
+  final lazy val vectors: Vector[Vec2] = sides.map{case (point, nextPoint) => nextPoint - point}
+  final lazy val angleDeltas: Vector[Float] = {
+    (vectors.last +: vectors).sliding(2, 1).map{ case Vector(v1, v2) => v1.angleTo(v2) }
+  }.toVector
   final lazy val bounds: Box2 = {
     val xValues = edge.map(_.x)
     val yValues = edge.map(_.y)
@@ -31,14 +31,14 @@ case class Polygon(edge: Seq[Vec2],
     )
   }
 
-  final lazy val outwardAngles: Seq[Float] = {
+  final lazy val outwardAngles: Vector[Float] = {
     def outwardAngle(v1: Vec2, v2: Vec2): Float = {
       if (clockwise) v2.ccwAngleTo(-v1)
       else v2.cwAngleTo(-v1)
     }
-    (vectors.last +: vectors).sliding(2, 1).map{ case Seq(v1, v2) => outwardAngle(v1, v2) }.toSeq
-  }
-  final lazy val inwardAngles: Seq[Float] = outwardAngles.map(360.0f - _)
+    (vectors.last +: vectors).sliding(2, 1).map{ case Vector(v1, v2) => outwardAngle(v1, v2) }
+  }.toVector
+  final lazy val inwardAngles: Vector[Float] = outwardAngles.map(360.0f - _)
   final lazy val cg: Vec2 = doCalcCg()
 
   final lazy val sliceableIndices: Map[Int, Set[Int]] = (for {
@@ -135,8 +135,8 @@ case class Polygon(edge: Seq[Vec2],
     val fwdDelta = i2 - i1
     val bwdDelta = fwdDelta - n
 
-    val segment1: Seq[Vec2] = edge.slice(i1, i2+1)
-    val segment2: Seq[Vec2] = (edge ++ edge).slice(i2, i2 - bwdDelta + 1)
+    val segment1: Vector[Vec2] = edge.slice(i1, i2+1)
+    val segment2: Vector[Vec2] = (edge ++ edge).slice(i2, i2 - bwdDelta + 1)
 
     val areaEpsilon = area * 1e-4f
     def segmentAreasExist: Boolean = Polygon(segment1).area > areaEpsilon && Polygon(segment2).area > areaEpsilon
@@ -178,8 +178,8 @@ case class Polygon(edge: Seq[Vec2],
     require(fwdDelta >= 2, s"Difference from Start index to End index must be >= 2")
     require(bwdDelta <= -2, s"Difference from End index to from index must be <= -2")
 
-    val fwdPolygon = Polygon(((0 to i1) ++ (i2 until n)).map(edge.apply))
-    val bwdPolygon = Polygon((i1 to i2).map(edge.apply))
+    val fwdPolygon = Polygon(((0 to i1) ++ (i2 until n)).toVector.map(edge.apply))
+    val bwdPolygon = Polygon((i1 to i2).toVector.map(edge.apply))
 
     (fwdPolygon, bwdPolygon)
   }
@@ -213,14 +213,14 @@ case class Polygon(edge: Seq[Vec2],
 
 object Polygon {
 
-  def apply(edge: Seq[Vec2]): Polygon = {
+  def apply(edge: Vector[Vec2]): Polygon = {
     require(edge.length >= 3, s"Polygon is less than 3 points")
     val w = clockwiseWeight(edge)
     new Polygon(edge, w > 0.0f, math.abs(w) / 2.0f)
   }
 
   // See http://stackoverflow.com/questions/1165647/how-to-determine-if-a-list-of-polygon-points-are-in-clockwise-order
-  def clockwiseWeight(edge: Seq[Vec2]): Float = {
+  def clockwiseWeight(edge: Vector[Vec2]): Float = {
     require(edge.length >= 3, s"Polygon is less than 3 points")
     var sum = 0.0f
     val n = edge.length

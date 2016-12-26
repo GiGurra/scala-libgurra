@@ -58,8 +58,8 @@ class BoxSpec
       val box9 = Box2(0.0f, -2.5f, 2.0f, 2.0f)
 
       for {
-        a <- Seq(box5,box6,box7,box8,box9)
-        b <- Seq(box5,box6,box7,box8,box9).filter(_ != a)
+        a <- Vector(box5,box6,box7,box8,box9)
+        b <- Vector(box5,box6,box7,box8,box9).filter(_ != a)
       } {
         a.overlaps(b) shouldBe false
         b.overlaps(a) shouldBe false

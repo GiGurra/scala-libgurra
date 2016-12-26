@@ -7,7 +7,7 @@ import com.github.gigurra.lang._
   */
 object ToArray {
 
-  def apply(vec2s: Seq[Vec2])(implicit f: FixErasure2[_]): Array[Float] = {
+  def apply(vec2s: Vector[Vec2])(implicit f: FixErasure2[_]): Array[Float] = {
     val n = vec2s.length * 2
     val out = new Array[Float](n)
     var i = 0
@@ -20,7 +20,7 @@ object ToArray {
     out
   }
 
-  def apply(vec3s: Seq[Vec3])(implicit f: FixErasure3[_]): Array[Float] = {
+  def apply(vec3s: Vector[Vec3])(implicit f: FixErasure3[_]): Array[Float] = {
     val n = vec3s.length * 3
     val out = new Array[Float](n)
     var i = 0
@@ -34,7 +34,7 @@ object ToArray {
     out
   }
 
-  def apply(vec4s: Seq[Vec4])(implicit f: FixErasure4[_]): Array[Float] = {
+  def apply(vec4s: Vector[Vec4])(implicit f: FixErasure4[_]): Array[Float] = {
     val n = vec4s.length * 4
     val out = new Array[Float](n)
     var i = 0
