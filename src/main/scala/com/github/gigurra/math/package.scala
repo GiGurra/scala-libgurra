@@ -26,15 +26,15 @@ package object math {
     def -(vec: Vec4): Vec4 = vec |- value
   }
 
-  implicit class Vec2ToArrayOps(vec2s: Vector[Vec2]) {
+  implicit class Vec2ToArrayOps(val vec2s: Vector[Vec2]) extends AnyVal {
     def toElementArray: Array[Float] = ToArray(vec2s)
   }
 
-  implicit class Vec3ToArrayOps(vec3s: Vector[Vec3]) {
+  implicit class Vec3ToArrayOps(val vec3s: Vector[Vec3]) extends AnyVal {
     def toElementArray: Array[Float] = ToArray(vec3s)
   }
 
-  implicit class Vec4ToArrayOps(vec4s: Vector[Vec4]) {
+  implicit class Vec4ToArrayOps(val vec4s: Vector[Vec4]) extends AnyVal {
     def toElementArray: Array[Float] = ToArray(vec4s)
   }
 
