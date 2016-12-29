@@ -13,9 +13,9 @@ case class Polygon(edge: Vector[Vec2],
   final lazy val asElementArray: Array[Float] = edge.toElementArray
   final lazy val sides: Vector[(Vec2, Vec2)] = (edge.sliding(2, 1).map(p => (p.head, p(1))) ++ Vector((edge.last, edge.head))).toVector
   final lazy val vectors: Vector[Vec2] = sides.map{case (point, nextPoint) => nextPoint - point}
-  final lazy val angleDeltas: Vector[Float] = {
+  final lazy val angleDeltas: Array[Float] = {
     (vectors.last +: vectors).sliding(2, 1).map{ case Vector(v1, v2) => v1.angleTo(v2) }
-  }.toVector
+  }.toArray
   final lazy val bounds: Box2 = {
     val xValues = edge.map(_.x)
     val yValues = edge.map(_.y)
@@ -31,14 +31,14 @@ case class Polygon(edge: Vector[Vec2],
     )
   }
 
-  final lazy val outwardAngles: Vector[Float] = {
+  final lazy val outwardAngles: Array[Float] = {
     def outwardAngle(v1: Vec2, v2: Vec2): Float = {
       if (clockwise) v2.ccwAngleTo(-v1)
       else v2.cwAngleTo(-v1)
     }
     (vectors.last +: vectors).sliding(2, 1).map{ case Vector(v1, v2) => outwardAngle(v1, v2) }
-  }.toVector
-  final lazy val inwardAngles: Vector[Float] = outwardAngles.map(360.0f - _)
+  }.toArray
+  final lazy val inwardAngles: Array[Float] = outwardAngles.map(360.0f - _)
   final lazy val cg: Vec2 = doCalcCg()
 
   final lazy val sliceableIndices: Map[Int, Set[Int]] = (for {
