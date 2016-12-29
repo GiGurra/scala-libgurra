@@ -376,4 +376,109 @@ class PolygonSpec
     triangle.inwardAngles.map(math.round) shouldBe Vector(90, 30, 60).reverse
 
   }
+
+  "Find all slice points in square with cut off corner" in {
+    """
+              O - - - - - O
+              |            \
+              |             O
+              |              \
+              O               O
+              |               |
+              |               |
+              O - - - O - - - O
+
+    """.stripMargin
+
+    val polygon = Polygon(Vector(
+      Vec2(0.0f, 0.0f),
+      Vec2(0.0f, 2.0f),
+      Vec2(0.0f, 4.0f),
+      Vec2(2.0f, 4.0f),
+      Vec2(3.0f, 3.0f),
+      Vec2(4.0f, 2.0f),
+      Vec2(4.0f, 0.0f),
+      Vec2(2.0f, 0.0f)
+    ))
+
+    // From lower left corner
+    polygon.isCleanSlice(0, 0) shouldBe false
+    polygon.isCleanSlice(0, 1) shouldBe false
+    polygon.isCleanSlice(0, 2) shouldBe false
+    polygon.isCleanSlice(0, 3) shouldBe true
+    polygon.isCleanSlice(0, 4) shouldBe true
+    polygon.isCleanSlice(0, 5) shouldBe true
+    polygon.isCleanSlice(0, 6) shouldBe false
+    polygon.isCleanSlice(0, 7) shouldBe false
+
+    // From left side
+    polygon.isCleanSlice(1, 0) shouldBe false
+    polygon.isCleanSlice(1, 1) shouldBe false
+    polygon.isCleanSlice(1, 2) shouldBe false
+    polygon.isCleanSlice(1, 3) shouldBe true
+    polygon.isCleanSlice(1, 4) shouldBe true
+    polygon.isCleanSlice(1, 5) shouldBe true
+    polygon.isCleanSlice(1, 6) shouldBe true
+    polygon.isCleanSlice(1, 7) shouldBe true
+
+    // From top left corner
+    polygon.isCleanSlice(2, 0) shouldBe false
+    polygon.isCleanSlice(2, 1) shouldBe false
+    polygon.isCleanSlice(2, 2) shouldBe false
+    polygon.isCleanSlice(2, 3) shouldBe false
+    polygon.isCleanSlice(2, 4) shouldBe true
+    polygon.isCleanSlice(2, 5) shouldBe true
+    polygon.isCleanSlice(2, 6) shouldBe true
+    polygon.isCleanSlice(2, 7) shouldBe true
+
+    // From top side
+    polygon.isCleanSlice(3, 0) shouldBe true
+    polygon.isCleanSlice(3, 1) shouldBe true
+    polygon.isCleanSlice(3, 2) shouldBe false
+    polygon.isCleanSlice(3, 3) shouldBe false
+    polygon.isCleanSlice(3, 4) shouldBe false
+    polygon.isCleanSlice(3, 5) shouldBe false
+    polygon.isCleanSlice(3, 6) shouldBe true
+    polygon.isCleanSlice(3, 7) shouldBe true
+
+    // From new side (previous top right corner)
+    polygon.isCleanSlice(4, 0) shouldBe true
+    polygon.isCleanSlice(4, 1) shouldBe true
+    polygon.isCleanSlice(4, 2) shouldBe true
+    polygon.isCleanSlice(4, 3) shouldBe false
+    polygon.isCleanSlice(4, 4) shouldBe false
+    polygon.isCleanSlice(4, 5) shouldBe false
+    polygon.isCleanSlice(4, 6) shouldBe true
+    polygon.isCleanSlice(4, 7) shouldBe true
+
+    // From right side
+    polygon.isCleanSlice(5, 0) shouldBe true
+    polygon.isCleanSlice(5, 1) shouldBe true
+    polygon.isCleanSlice(5, 2) shouldBe true
+    polygon.isCleanSlice(5, 3) shouldBe false
+    polygon.isCleanSlice(5, 4) shouldBe false
+    polygon.isCleanSlice(5, 5) shouldBe false
+    polygon.isCleanSlice(5, 6) shouldBe false
+    polygon.isCleanSlice(5, 7) shouldBe true
+
+    // From lower right corner
+    polygon.isCleanSlice(6, 0) shouldBe false
+    polygon.isCleanSlice(6, 1) shouldBe true
+    polygon.isCleanSlice(6, 2) shouldBe true
+    polygon.isCleanSlice(6, 3) shouldBe true
+    polygon.isCleanSlice(6, 4) shouldBe true
+    polygon.isCleanSlice(6, 5) shouldBe false
+    polygon.isCleanSlice(6, 6) shouldBe false
+    polygon.isCleanSlice(6, 7) shouldBe false
+
+    // From lower side
+    polygon.isCleanSlice(7, 0) shouldBe false
+    polygon.isCleanSlice(7, 1) shouldBe true
+    polygon.isCleanSlice(7, 2) shouldBe true
+    polygon.isCleanSlice(7, 3) shouldBe true
+    polygon.isCleanSlice(7, 4) shouldBe true
+    polygon.isCleanSlice(7, 5) shouldBe true
+    polygon.isCleanSlice(7, 6) shouldBe false
+    polygon.isCleanSlice(7, 7) shouldBe false
+  }
 }

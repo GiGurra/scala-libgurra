@@ -138,15 +138,15 @@ case class Polygon(edge: Vector[Vec2],
     val segment1: Vector[Vec2] = edge.slice(i1, i2+1)
     val segment2: Vector[Vec2] = (edge ++ edge).slice(i2, i2 - bwdDelta + 1)
 
-    val areaEpsilon = area * 1e-4f
+    val areaEpsilon = area * 1e-5f
     def segmentAreasExist: Boolean = Polygon(segment1).area > areaEpsilon && Polygon(segment2).area > areaEpsilon
 
     if (fwdDelta >= 2 && bwdDelta <= -2 && segmentAreasExist) {
       val unscaledOrigin = edge(i1)
       val unscaledEnd = edge(i2)
       val unscaledVector = unscaledEnd - unscaledOrigin
-      val origin: Vec2 = unscaledOrigin + unscaledVector * 1e-7f
-      val end: Vec2 = unscaledEnd - unscaledVector * 1e-7f
+      val origin: Vec2 = unscaledOrigin + unscaledVector * 1e-6f
+      val end: Vec2 = unscaledEnd - unscaledVector * 1e-6f
       doContains(origin) && doContains(end) && sides.forall(!LinesIntersect(_, (origin, end)))
     } else {
       false
