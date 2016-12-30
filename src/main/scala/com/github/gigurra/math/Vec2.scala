@@ -25,6 +25,7 @@ case class Vec2(x: Float, y: Float) {
   final def length: Float = norm
   final def angle: Float = math.atan2(y, x).toDegrees.toFloat
   final def angleTo(otherVector: Vec2): Float = (this.angle - otherVector.angle).normalizeDegreesPm180
+  final def orthogonal: Vec2 = Vec2(-y, x)
 
   final def cwAngleTo(otherVector: Vec2): Float = {
     val thisAngle = this.angle
